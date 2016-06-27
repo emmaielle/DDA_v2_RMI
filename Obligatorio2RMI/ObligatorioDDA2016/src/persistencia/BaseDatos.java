@@ -21,14 +21,18 @@ public class BaseDatos {
     private Statement stmt;
     private static BaseDatos instancia = new BaseDatos(); 
 
+    private final String URL="jdbc:mysql://localhost/obligatoriodda2016";
+    private final String USER="root";
+    private final String PASS="";
+    
     public static BaseDatos getInstancia() {
         return instancia;
     }
     private BaseDatos() {
     }
-    public void conectar(String url,String user,String pass){
+    public void conectar(){
         try {
-            conexion = DriverManager.getConnection(url, user, pass);
+            conexion = DriverManager.getConnection(URL, USER, PASS);
             stmt = conexion.createStatement();
         } catch (SQLException ex) {
             System.out.println("Error al conectar:" + ex.getMessage());

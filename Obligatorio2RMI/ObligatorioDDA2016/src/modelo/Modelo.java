@@ -21,6 +21,7 @@ public class Modelo extends ObservableRemotoV1 implements IModelo {
         
     private SistemaJugador sj = SistemaJugador.getInstancia();
     private Casino casino = Casino.getInstancia();
+    private static Modelo instancia;
     public static final int EVENTO_LOGIN = 1;
     public static final int EVENTO_LOGUEADOS= 2;
     public static final int EVENTO_NUEVA_MESA = 3;
@@ -37,7 +38,18 @@ public class Modelo extends ObservableRemotoV1 implements IModelo {
     public static final int EVENTO_APUESTASWINDOW = 14;
 
     
-    public Modelo() throws RemoteException{
+    public static Modelo getInstancia(){
+        if (instancia == null){
+            try {
+                instancia = new Modelo();
+            } catch (RemoteException ex) {
+                System.out.println("Error " + ex);
+            }
+        }
+        return instancia;
+    }
+    
+    private Modelo() throws RemoteException{
     }
 
     
@@ -73,11 +85,7 @@ public class Modelo extends ObservableRemotoV1 implements IModelo {
     
     @Override
     public void logout(Jugador j){
-        try {
-            sj.logout(j);
-        } catch (RemoteException ex) {
-            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        sj.logout(j);
     }
     
     @Override

@@ -66,7 +66,7 @@ public class Numero {
     @Override
     public String toString() {
         String j = "Sin marcar";
-        if(apuesta!=null) j=apuesta.getJugador().getJugador().getNombreCompleto();
+        if(apuesta!=null) j=apuesta.getJugador().getNombreCompleto();
         return "Numero{" + "valor=" + valor + ", usuario=" + j + '}';
     }
 

@@ -9,8 +9,6 @@ import exceptions.InvalidUserActionException;
 import java.awt.Color;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -18,7 +16,7 @@ import java.util.logging.Logger;
  */
 public class JuegoRuleta  {
 
-    private static JuegoRuleta instancia = new JuegoRuleta();
+    private static final JuegoRuleta instancia = new JuegoRuleta();
     private ArrayList<Mesa> listadoMesas = new ArrayList();
     
     private JuegoRuleta() {
@@ -41,24 +39,15 @@ public class JuegoRuleta  {
     
     // <editor-fold defaultstate="collapsed" desc="Metodos">
     public void agregar(Mesa m) throws InvalidUserActionException{
-        try {
-            if(listadoMesas.contains(m))throw new InvalidUserActionException("La mesa ya existe");
-            listadoMesas.add(m);
-            new Modelo().notificar(Modelo.EVENTO_NUEVA_MESA);
-            //Modelo.getInstancia().avisar(Modelo.EVENTO_NUEVA_MESA);
-        } catch (RemoteException ex) {
-            Logger.getLogger(JuegoRuleta.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        if(listadoMesas.contains(m))throw new InvalidUserActionException("La mesa ya existe");
+        listadoMesas.add(m);
+        Modelo.getInstancia().notificar(Modelo.EVENTO_NUEVA_MESA);
     }
     
     public void cerrarMesa(Mesa m){
-        try {
-            listadoMesas.remove(m);
-            (m.buscarRonda(m.getUltimaRonda())).stopProceso();
-            new Modelo().notificar(Modelo.EVENTO_SALIR_MESA);
-        } catch (RemoteException ex) {
-            Logger.getLogger(JuegoRuleta.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        listadoMesas.remove(m);
+        (m.buscarRonda(m.getUltimaRonda())).stopProceso();
+        Modelo.getInstancia().notificar(Modelo.EVENTO_SALIR_MESA);
     }
     
     public Mesa buscarMesa(String nom) {

@@ -23,8 +23,8 @@ public class VistaApuestasV1 extends javax.swing.JDialog implements VistaApuesta
     private ControladorApuestas controlador;
     
     public VistaApuestasV1(Jugador j) {
+        initComponents();
         try {
-            initComponents();
             controlador = new ControladorApuestas(this, j);
             lbl_title.setText("Apuestas de " + j.getNombreCompleto());
             mostrarApuestas(controlador.cargarApuestas());
@@ -128,7 +128,7 @@ public class VistaApuestasV1 extends javax.swing.JDialog implements VistaApuesta
     private ArrayList<String> formatApuestas(ArrayList<Apuesta> apuestas) {
         ArrayList<String> out = new ArrayList<>();
         for (Apuesta a: apuestas){
-            String tmp = "Jugador: " + a.getJugador().getJugador().getNombreCompleto() + 
+            String tmp = "Jugador: " + a.getJugador().getNombreCompleto() + 
                     "; Apuesta: " + a.getNumero() + 
                     "; Monto ganado: " + a.getMontoGanado();
             out.add(tmp);

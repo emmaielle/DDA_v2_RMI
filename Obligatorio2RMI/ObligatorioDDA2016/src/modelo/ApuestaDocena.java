@@ -17,8 +17,12 @@ public class ApuestaDocena extends Apuesta {
 
     private static final int COEFICIENTE_PAGO = 3;
     
-    public ApuestaDocena(int monto, JugadorRuleta jugador, String numero, Ronda ronda, Date fechaHora) {
+    public ApuestaDocena(int monto, Jugador jugador, String numero, Ronda ronda, Date fechaHora) {
         super(monto, jugador, numero, ronda, fechaHora);
+    }
+    
+    public ApuestaDocena(int monto, String numero, Ronda ronda, Date fechaHora) {
+        super(monto, numero, ronda, fechaHora);
     }
 
     @Override

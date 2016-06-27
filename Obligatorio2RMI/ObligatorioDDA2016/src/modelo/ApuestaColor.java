@@ -16,8 +16,12 @@ public class ApuestaColor extends Apuesta {
 
     private static final int COEFICIENTE_PAGO = 2;
     
-    public ApuestaColor(int monto, JugadorRuleta jugador, String sNumero, Ronda ronda, Date fechaHora) {
+    public ApuestaColor(int monto, Jugador jugador, String sNumero, Ronda ronda, Date fechaHora) {
         super(monto, jugador, sNumero, ronda, fechaHora);
+    }
+    
+    public ApuestaColor(int monto, String sNumero, Ronda ronda, Date fechaHora) {
+        super(monto, sNumero, ronda, fechaHora);
     }
 
     @Override

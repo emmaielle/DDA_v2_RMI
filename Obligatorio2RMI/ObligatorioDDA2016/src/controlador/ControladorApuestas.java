@@ -37,9 +37,7 @@ public class ControladorApuestas extends UnicastRemoteObject implements Observad
             this.modelo=(Modelo)Naming.lookup("rmi://localhost/modelo");
             this.j = j;
             modelo.agregar(this);
-        } catch (NotBoundException ex) {
-            Logger.getLogger(ControladorApuestas.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
+        } catch (NotBoundException | MalformedURLException ex) {
             Logger.getLogger(ControladorApuestas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

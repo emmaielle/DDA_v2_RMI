@@ -15,7 +15,7 @@ import java.util.Date;
 public abstract class Apuesta {
     private int oid;
     private int monto;
-    private JugadorRuleta jugador;
+    private Jugador jugador;
     private String numero;
     private Ronda ronda;
     private final Date fechaHora;
@@ -23,9 +23,16 @@ public abstract class Apuesta {
 
     // <editor-fold defaultstate="collapsed" desc="Constructor"> 
 
-    public Apuesta(int monto, JugadorRuleta jugador, String sNumero, Ronda ronda, Date fechaHora) {
+    public Apuesta(int monto, Jugador jugador, String sNumero, Ronda ronda, Date fechaHora) {
         this.monto = monto;
         this.jugador = jugador;
+        this.numero = sNumero;
+        this.ronda = ronda;
+        this.fechaHora = fechaHora;
+    }
+    
+    public Apuesta(int monto, String sNumero, Ronda ronda, Date fechaHora) {
+        this.monto = monto;
         this.numero = sNumero;
         this.ronda = ronda;
         this.fechaHora = fechaHora;
@@ -61,11 +68,11 @@ public abstract class Apuesta {
         this.ronda = ronda;
     }
     
-    public JugadorRuleta getJugador() {
+    public Jugador getJugador() {
         return jugador;
     }
 
-    public void setJugador(JugadorRuleta jugador) {
+    public void setJugador(Jugador jugador) {
         this.jugador = jugador;
     }
 

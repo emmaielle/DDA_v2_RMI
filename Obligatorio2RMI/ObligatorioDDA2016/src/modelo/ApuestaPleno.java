@@ -10,8 +10,13 @@ public class ApuestaPleno extends Apuesta {
     private static final int COEFICIENTE_PAGO = 35;
 
     
-    public ApuestaPleno(int monto, JugadorRuleta jugador, String sNumero, Numero numero, Ronda ronda, Date fechaHora) {
+    public ApuestaPleno(int monto, Jugador jugador, String sNumero, Numero numero, Ronda ronda, Date fechaHora) {
         super(monto, jugador, sNumero, ronda, fechaHora);
+            this.numeroTablero = numero;
+    }
+    
+    public ApuestaPleno(int monto, String sNumero, Numero numero, Ronda ronda, Date fechaHora) {
+        super(monto, sNumero, ronda, fechaHora);
             this.numeroTablero = numero;
     }
 

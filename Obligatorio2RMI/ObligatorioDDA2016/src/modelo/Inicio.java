@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package vista;
+package modelo;
 
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import modelo.Modelo;
 
 /**
  *
@@ -24,7 +23,7 @@ public class Inicio {
         try{
             
             LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
-            Modelo m = new Modelo();
+            Modelo m = Modelo.getInstancia();
             cargarDatos(m);
             Naming.bind("modelo", m);
             System.out.println("Listo!");

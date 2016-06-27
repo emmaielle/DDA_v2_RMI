@@ -30,7 +30,7 @@ import observadorRemoto.ObservadorRemoto;
  */
 public class ControladorMesa extends UnicastRemoteObject implements ObservadorRemoto {
 
-    private IModelo modelo;
+    private IModelo modelo = Modelo.getInstancia();
     private VistaMesa vista;
     private JugadorRuleta jugador;
     private Mesa mesa;
@@ -48,6 +48,38 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
         } catch (MalformedURLException ex) {
             Logger.getLogger(ControladorMesa.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    @Override
+    public void actualizar(ObservableRemoto origen, Serializable param) throws RemoteException {
+        if (param.equals(Modelo.EVENTO_ADD_SECONDS)){
+            vista.mostrarSegundos(mesa.buscarRonda(mesa.getUltimaRonda()).getElProceso().getSegundos());
+        }
+        else if (param.equals(Modelo.EVENTO_SIN_JUGAR)){
+            //vista.mostrarSegundos(Proceso.getSegundos());
+            //System.out.println("Echar de mesa!!");
+            echarDeMesaPorNoJugar();
+        }
+        else if(param.equals(Modelo.EVENTO_TABLERO)){
+            vista.mostrar(mesa.getNumeros());
+            long tot = mesa.buscarRonda(mesa.getUltimaRonda()).totalApostadoRonda(jugador.getJugador()); // mas limpio??
+            vista.mostrarTotalApostado(tot);
+        }
+        else if(param.equals(Modelo.EVENTO_SORTEARNUMERO)){            
+            buscarNumeroActual();
+            if (!modelo.estaEnEspera(jugador, mesa))  vista.habilitar(true);
+            mensajeRonda();
+            mostrarSaldo();
+            resetButtons();
+        }
+        else if (param.equals(Modelo.EVENTO_NUEVO_JUGADOR_MESA_RULETA) || param.equals(Modelo.EVENTO_SALIR_MESA)){
+            vista.mostrarJugadores(modelo.getJugadoresPorMesa(mesa));
+        }
+        else if (param.equals(Modelo.EVENTO_CHECK_SALDOS)){
+            if (jugador.expulsado()) vista.cerrarVentana("Se le terminó el saldo");
+        }
+        else if(param.equals(Modelo.EVENTO_ACTUALIZA_SALDOS))
+            vista.mostrarSaldo(jugador.getJugador().getSaldo());
     }
     
     public void apostar(String numero, Numero n, String v) throws InvalidUserActionException { 
@@ -114,35 +146,4 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
         vista.resetButtons();
     }
 
-    @Override
-    public void actualizar(ObservableRemoto origen, Serializable param) throws RemoteException {
-        if (param.equals(Modelo.EVENTO_ADD_SECONDS)){
-            vista.mostrarSegundos(mesa.buscarRonda(mesa.getUltimaRonda()).getElProceso().getSegundos());
-        }
-        else if (param.equals(Modelo.EVENTO_SIN_JUGAR)){
-            //vista.mostrarSegundos(Proceso.getSegundos());
-            //System.out.println("Echar de mesa!!");
-            echarDeMesaPorNoJugar();
-        }
-        else if(param.equals(Modelo.EVENTO_TABLERO)){
-            vista.mostrar(mesa.getNumeros());
-            long tot = mesa.buscarRonda(mesa.getUltimaRonda()).totalApostadoRonda(jugador); // mas limpio??
-            vista.mostrarTotalApostado(tot);
-        }
-        else if(param.equals(Modelo.EVENTO_SORTEARNUMERO)){            
-            buscarNumeroActual();
-            if (!modelo.estaEnEspera(jugador, mesa))  vista.habilitar(true);
-            mensajeRonda();
-            mostrarSaldo();
-            resetButtons();
-        }
-        else if (param.equals(Modelo.EVENTO_NUEVO_JUGADOR_MESA_RULETA) || param.equals(Modelo.EVENTO_SALIR_MESA)){
-            vista.mostrarJugadores(modelo.getJugadoresPorMesa(mesa));
-        }
-        else if (param.equals(Modelo.EVENTO_CHECK_SALDOS)){
-            if (jugador.expulsado()) vista.cerrarVentana("Se le terminó el saldo");
-        }
-        else if(param.equals(Modelo.EVENTO_ACTUALIZA_SALDOS))
-            vista.mostrarSaldo(jugador.getJugador().getSaldo());
-    }
 }

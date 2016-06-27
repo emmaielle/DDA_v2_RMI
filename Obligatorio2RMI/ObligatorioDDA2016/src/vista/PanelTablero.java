@@ -10,6 +10,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import modelo.Apuesta;
+import modelo.JugadorRuleta;
 import modelo.Numero;
 
 /**
@@ -39,7 +40,8 @@ public class PanelTablero extends javax.swing.JPanel {
         for(Numero n:numeros){
             BotonRuleta b = new BotonRuleta(n.getValor() + "");
             if (n.getApuesta()!= null) {
-                b.setBackground(n.getApuesta().getJugador().getColor());
+                JugadorRuleta jr = (JugadorRuleta)n.getApuesta().getJugador().getJugadorTipo();
+                b.setBackground(jr.getColor());            
             }
             else b.setBackground(n.getColor());
             
@@ -49,7 +51,7 @@ public class PanelTablero extends javax.swing.JPanel {
             
             Apuesta a = n.getApuesta();
             if(a==null) b.setToolTipText("Sin marcar");
-            else b.setToolTipText(a.getJugador().getJugador().getNombreCompleto() + ". Monto: " + a.getMonto());
+            else b.setToolTipText(a.getJugador().getNombreCompleto() + ". Monto: " + a.getMonto());
             add(b);
         }
     }

@@ -86,7 +86,8 @@ public class Mesa {
     // <editor-fold defaultstate="collapsed" desc="Metodos">  
     
     public void agregarJugador(Color c, Jugador j){
-        try {
+        // aca perdi el try catch :(
+//        try {
             // crea y agrega el jugadorRuleta en la mesa actual y lo guarda en su lista de JR
             // devuelve boolean que indica si el jugador esta en espera o no
             JugadorRuleta jr = new JugadorRuleta(c, this, j);
@@ -97,18 +98,18 @@ public class Mesa {
             else if(jugadoresMesa.size()<4 && this.buscarRonda(this.getUltimaRonda()).getNroGanador() == null){           
                 jugadoresEspera.add(jr);
             }
-            new Modelo().notificar(Modelo.EVENTO_NUEVO_JUGADOR_MESA_RULETA);
+            Modelo.getInstancia().notificar(Modelo.EVENTO_NUEVO_JUGADOR_MESA_RULETA);
             j.setEnMesa(true);
-        } catch (RemoteException ex) {
-            Logger.getLogger(Mesa.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        } catch (RemoteException ex) {
+//            Logger.getLogger(Mesa.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
     
     public void quitarJugador(JugadorRuleta j) throws RemoteException{
         jugadoresMesa.remove(j);
         jugadoresEspera.remove(j);
         j.getJugador().setEnMesa(false);
-        if(jugadoresMesa.size()>0) buscarRonda(getUltimaRonda()).eliminarApuestas(j);
+        if(jugadoresMesa.size()>0) buscarRonda(getUltimaRonda()).eliminarApuestas(j.getJugador());
         if (!j.isApostado()) {
             apuestaTotal();
         }
@@ -116,7 +117,7 @@ public class Mesa {
                 ". Rondas: " + j.getRondasSinApostar());
         j.setRondasSinApostar(0);
         j.setRondasSinApostarAnterior(0);
-        new Modelo().notificar(Modelo.EVENTO_SALIR_MESA);
+        Modelo.getInstancia().notificar(Modelo.EVENTO_SALIR_MESA);
         // no necesito quitar mesa de j, porque se va a eliminar solo con el garbage collector
     }
 
@@ -219,11 +220,11 @@ public class Mesa {
         // reviso resultados // aviso ganadores // reparto plata // guardo historial
         persistencia();
         nuevaRonda();
-        new Modelo().notificar(Modelo.EVENTO_SORTEARNUMERO);
+        Modelo.getInstancia().notificar(Modelo.EVENTO_SORTEARNUMERO);
         return nro;
     }
 
-    public void nuevaRonda() throws RemoteException{
+    public void nuevaRonda() {
         // esto asegura que no intente pasar en espera solo porque termino la ronda
         // y no considere la max cant de jugadores por ronda
         while (jugadoresMesa.size() < 4 && !jugadoresEspera.isEmpty()){
@@ -234,8 +235,8 @@ public class Mesa {
             }
         }
         initMesa();
-        new Modelo().notificar(Modelo.EVENTO_TABLERO);
-        new Modelo().notificar(Modelo.EVENTO_NUEVO_JUGADOR_MESA_RULETA);
+        Modelo.getInstancia().notificar(Modelo.EVENTO_TABLERO);
+        Modelo.getInstancia().notificar(Modelo.EVENTO_NUEVO_JUGADOR_MESA_RULETA);
     }
     
     public Numero getNumeroGanador() {
@@ -260,7 +261,7 @@ public class Mesa {
                     if(jugador==jr)
                         (buscarRonda(getUltimaRonda())).apostar(numero, n, montoInt, jugador);
                 }
-                new Modelo().notificar(Modelo.EVENTO_ACTUALIZA_SALDOS);
+                Modelo.getInstancia().notificar(Modelo.EVENTO_ACTUALIZA_SALDOS);
             }
         }
     }
@@ -271,7 +272,7 @@ public class Mesa {
             if(jugador==jr)
                 if (n!=null && n.getApuesta() != null) (buscarRonda(getUltimaRonda())).desapostar(jugador, n);
         }
-        new Modelo().notificar(Modelo.EVENTO_ACTUALIZA_SALDOS);
+        Modelo.getInstancia().notificar(Modelo.EVENTO_ACTUALIZA_SALDOS);
     }
     
     public void desapostar(String tipo, JugadorRuleta jugador) throws InvalidUserActionException, RemoteException{
@@ -280,7 +281,7 @@ public class Mesa {
             if(jugador==jr)
                 (buscarRonda(getUltimaRonda())).desapostar(jugador, tipo);
         }
-        new Modelo().notificar(Modelo.EVENTO_ACTUALIZA_SALDOS);
+        Modelo.getInstancia().notificar(Modelo.EVENTO_ACTUALIZA_SALDOS);
     }
 
     public Numero finalizarApuestaPorTiempo() throws RemoteException{
@@ -291,7 +292,7 @@ public class Mesa {
     public Numero finalizarApuesta(JugadorRuleta jr)throws RemoteException{
         cantFinalizados++;
         Numero nroSorteado = apuestaTotal();
-        new Modelo().notificar(Modelo.EVENTO_SIN_JUGAR);
+        Modelo.getInstancia().notificar(Modelo.EVENTO_SIN_JUGAR);
         return nroSorteado;
     } 
     
@@ -327,11 +328,7 @@ public class Mesa {
     }
     
     public void avisarCheckSaldo()  {
-        try {
-            new Modelo().notificar(Modelo.EVENTO_CHECK_SALDOS);
-        } catch (RemoteException ex) {
-            Logger.getLogger(Mesa.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Modelo.getInstancia().notificar(Modelo.EVENTO_CHECK_SALDOS);
     }
     
     public boolean estaEnEspera(JugadorRuleta jugador) {
@@ -355,22 +352,18 @@ public class Mesa {
 
 
     private void persistencia() {
-        String url="jdbc:mysql://localhost/obligatoriodda2016";
-        String user="root";
-        String pass="";
         BaseDatos bd = BaseDatos.getInstancia();
-        bd.conectar(url, user, pass);
+        bd.conectar();
         for(JugadorRuleta jr:jugadoresMesa){
             persistoJugador(jr, bd);
             persistoRonda(jr,bd);   
         }     
         bd.desconectar();
-
     }
 
     private void persistoJugador(JugadorRuleta jr, BaseDatos bd) {
         MapeadorJugador map = new MapeadorJugador();
-        ArrayList jugadores = bd.consultar(map, " where u.oid = "+jr.getJugador().getOid());
+        ArrayList jugadores = bd.consultar(map, " and u.oid = "+jr.getJugador().getOid());
         Jugador j = (Jugador) jugadores.get(0);
         map.setJ(j);
         j.setSaldo(jr.getJugador().getSaldo());

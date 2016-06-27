@@ -19,15 +19,15 @@ import java.util.logging.Logger;
  */
 public class Ronda implements Observer{
     private int oid;
-    private final int nroRonda;
+    private int nroRonda;
     private ArrayList<Apuesta> apuestasGanadoras = new ArrayList<>();
     private Numero nroGanador = null;
     //private String colorGanador; ///
     private ArrayList<Apuesta> apuestas = new ArrayList<>();
-    private static int TIEMPO_LIMITE = 10; // minutos
-    private final Mesa mesa;
+    private static int TIEMPO_LIMITE = 1; // minutos
+    private Mesa mesa;
     private Date fechaYhoraFin;
-    private final Proceso elProceso;
+    private Proceso elProceso;
 
 
     // <editor-fold defaultstate="collapsed" desc="Constructor">   
@@ -38,6 +38,9 @@ public class Ronda implements Observer{
         elProceso.addObserver(this);
         elProceso.reset();
         elProceso.ejecutar();
+    }
+    public Ronda(){
+        
     }
     
     //</editor-fold>
@@ -55,6 +58,10 @@ public class Ronda implements Observer{
         Ronda.TIEMPO_LIMITE = TIEMPO_LIMITE;
     }
 
+    public void setMesa(Mesa mesa) {
+        this.mesa = mesa;
+    }
+    
     public Mesa getMesa() {
         return mesa;
     }
@@ -148,7 +155,7 @@ public class Ronda implements Observer{
     public void apostar(String numero, Numero n, int v, JugadorRuleta jugador) throws RemoteException { //funciona en ambos sentidos si se clickea de nuevo
         Apuesta yaApostada = buscarApuestaPorTipo(numero);
         if (yaApostada == null){ // si entra aca es porque ese numero no fue elegido antes
-            Apuesta a = setApuestaByType(numero, v, jugador, n);
+            Apuesta a = setApuestaByType(numero, v, jugador.getJugador(), n);
             if (a.validar()){
                 if (!areThereBetsInThisRondaForThisPlayer(jugador)) {
                     jugador.setRondasSinApostarAnterior(jugador.getRondasSinApostar());
@@ -175,8 +182,8 @@ public class Ronda implements Observer{
         if (!areThereBetsInThisRondaForThisPlayer(j)) j.setRondasSinApostar(j.getRondasSinApostarAnterior());
     }
     
-    public void quitarApuesta(Apuesta a) throws RemoteException{
-        a.getJugador().getJugador().modificarSaldo(true,a.getMonto());
+    public void quitarApuesta(Apuesta a) {
+        a.getJugador().modificarSaldo(true,a.getMonto());
         if (a instanceof ApuestaPleno){
             ((ApuestaPleno)a).getNumeroTablero().setApuesta(null);
         }
@@ -184,16 +191,16 @@ public class Ronda implements Observer{
         a.setJugador(null);
         a.setRonda(null);
         apuestas.remove(a);
-        new Modelo().notificar(Modelo.EVENTO_TABLERO);
+        Modelo.getInstancia().notificar(Modelo.EVENTO_TABLERO);
     }
     
-    public void agregarApuesta(Apuesta a) throws RemoteException{
+    public void agregarApuesta(Apuesta a) {
         if (a instanceof ApuestaPleno){
             ((ApuestaPleno)a).getNumeroTablero().setApuesta(a);
         }
         a.getJugador().agregarApuesta(a);
         apuestas.add(a);
-        new Modelo().notificar(Modelo.EVENTO_TABLERO);
+        Modelo.getInstancia().notificar(Modelo.EVENTO_TABLERO);
     }
 
     private void lookForWinner() throws RemoteException {
@@ -205,8 +212,8 @@ public class Ronda implements Observer{
         }
     }
     
-    public void modificarSaldos(Apuesta a) throws RemoteException {
-        Jugador j = a.getJugador().getJugador();
+    public void modificarSaldos(Apuesta a) {
+        Jugador j = a.getJugador();
         boolean ganadora = false;
         if (!apuestasGanadoras.isEmpty()){
             for (Apuesta ag : apuestasGanadoras){
@@ -223,10 +230,10 @@ public class Ronda implements Observer{
             j.setTotalApostado(j.getTotalApostado() + a.getMonto());
             a.setMontoGanado(0);
         }
-        new Modelo().notificar(Modelo.EVENTO_ACTUALIZA_SALDOS);
+        Modelo.getInstancia().notificar(Modelo.EVENTO_ACTUALIZA_SALDOS);
     }
     
-    public void eliminarApuestas(JugadorRuleta j) throws RemoteException{
+    public void eliminarApuestas(Jugador j) throws RemoteException{
         for (int i = 0; i < apuestas.size(); i++){
             if(apuestas.get(i).getJugador() == j){
                 quitarApuesta(apuestas.get(i));
@@ -235,7 +242,7 @@ public class Ronda implements Observer{
         }
     }
     
-    public long totalApostadoRonda(JugadorRuleta j){
+    public long totalApostadoRonda(Jugador j){
         long total = 0;
         for(Apuesta a:apuestas){
             if(a.getJugador()==j) total += a.getMonto();
@@ -252,13 +259,9 @@ public class Ronda implements Observer{
     // </editor-fold>
 
     @Override
-    public void update(java.util.Observable o, Object arg) {
+    public void update(java.util.Observable o, Object arg)   {
         if (arg.equals(Proceso.EVENTO_ADD_SECONDS)){
-            try {
-                new Modelo().notificar(Modelo.EVENTO_ADD_SECONDS);
-            } catch (RemoteException ex) {
-                Logger.getLogger(Ronda.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Modelo.getInstancia().notificar(Modelo.EVENTO_ADD_SECONDS);
         }
         else if (arg.equals(Proceso.EVENTO_TIME_OUT)){            
             try {
@@ -266,11 +269,7 @@ public class Ronda implements Observer{
             } catch (RemoteException ex) {
                 Logger.getLogger(Ronda.class.getName()).log(Level.SEVERE, null, ex);
             }
-            try {
-                new Modelo().notificar(Modelo.EVENTO_SIN_JUGAR);
-            } catch (RemoteException ex) {
-                Logger.getLogger(Ronda.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Modelo.getInstancia().notificar(Modelo.EVENTO_SIN_JUGAR);
         }
     }
 
@@ -283,19 +282,41 @@ public class Ronda implements Observer{
         elProceso.deleteObserver(this);
     }
 
-    private Apuesta setApuestaByType(String numero, int monto, JugadorRuleta jugador, Numero n) {
+    public Apuesta setApuestaByType(String numero, int monto, Jugador jugador, Numero n) {
         Apuesta a;
-        String type = numero.split(" ")[0];
-        if (n != null && type.equals("Pleno")){
+        if (n != null && numero.contains("Pleno")){
             a = new ApuestaPleno(monto, jugador, numero, n, this, new Date());
+            n.setApuesta(a);
         }
-        else if (type.equals("Color")){
+        else if (numero.contains("Color")){
             a = new ApuestaColor(monto, jugador, numero, this, new Date());
         }
-        else if (type.equals("Docena")){
+        else if (numero.contains("Docena")){
             a = new ApuestaDocena(monto, jugador, numero, this, new Date());
         }
         else a = null;
         return a;
+    }
+
+    public void agregar(Apuesta a) {
+        apuestas.add(a);
+    }
+    
+    public void agregar(int monto, String sNumero, Date fechayhora){
+        Apuesta a;
+        if(sNumero.contains("Pleno")){
+            a = new ApuestaPleno(monto, 
+                    sNumero, null, this, fechayhora);
+            a.setMontoGanado(monto);            
+        }
+        else if(sNumero.contains("Docena")){
+            a=new ApuestaDocena(monto, sNumero, this, fechayhora);
+            a.setMontoGanado(monto);
+        }
+        else {
+            a=new ApuestaColor(monto, sNumero, this, fechayhora);
+            a.setMontoGanado(monto);
+        }
+        apuestas.add(a);
     }
 }
