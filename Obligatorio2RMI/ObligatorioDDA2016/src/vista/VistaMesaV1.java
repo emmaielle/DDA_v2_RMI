@@ -38,7 +38,7 @@ public class VistaMesaV1 extends javax.swing.JDialog implements VistaMesa, Actio
         try {
             initComponents();
             setTitle("Mesa: " + m.getNombre()+ " - Jugador: " + j.getNombreCompleto());
-            JugadorRuleta jr= m.buscarJugador(j);
+            JugadorRuleta jr= m.buscarJugador(j); // acaaa
             controlador = new ControladorMesa(this,m,jr);
             top = new PanelDatos(controlador);
             split.setTopComponent(top);

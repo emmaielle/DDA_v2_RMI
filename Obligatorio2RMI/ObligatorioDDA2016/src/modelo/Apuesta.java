@@ -5,6 +5,7 @@
  */
 package modelo;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,12 +13,12 @@ import java.util.Date;
  *
  * @author Euge
  */
-public abstract class Apuesta {
+public abstract class Apuesta implements ApuestaRemoto {
     private int oid;
     private int monto;
-    private Jugador jugador;
+    private  Jugador jugador;
     private String numero;
-    private Ronda ronda;
+    private  Ronda ronda;
     private final Date fechaHora;
     private int montoGanado;
 

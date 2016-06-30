@@ -6,13 +6,13 @@
 package modelo;
 
 import java.awt.Color;
-import java.util.ArrayList;
+import java.io.Serializable;
 
 /**
  *
  * @author Euge
  */
-public class JugadorRuleta {
+public class JugadorRuleta implements Serializable{
     private Color color;
     private Mesa mesa;
     private Jugador jugador;

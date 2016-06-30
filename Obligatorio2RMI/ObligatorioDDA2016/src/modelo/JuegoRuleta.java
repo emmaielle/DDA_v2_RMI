@@ -7,6 +7,7 @@ package modelo;
 
 import exceptions.InvalidUserActionException;
 import java.awt.Color;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ import java.util.ArrayList;
  *
  * @author Euge
  */
-public class JuegoRuleta  {
+public class JuegoRuleta implements Serializable {
 
     private static final JuegoRuleta instancia = new JuegoRuleta();
     private ArrayList<Mesa> listadoMesas = new ArrayList();

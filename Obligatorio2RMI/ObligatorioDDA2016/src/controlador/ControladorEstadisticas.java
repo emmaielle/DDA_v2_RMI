@@ -31,7 +31,7 @@ public class ControladorEstadisticas extends UnicastRemoteObject implements Obse
     public ControladorEstadisticas(VistaEstadisticas vista, Jugador jugador) throws RemoteException{
         try {
             this.vista = vista;
-            this.modelo = (Modelo)Naming.lookup("rmi://localhost/modelo");
+            this.modelo = (IModelo)Naming.lookup("rmi://localhost/modelo");
             this.jugador = jugador;
             modelo.agregar(this);
         } catch (NotBoundException ex) {
@@ -42,11 +42,19 @@ public class ControladorEstadisticas extends UnicastRemoteObject implements Obse
     }
     
     public void mostrarTotalApostadoTodos(){
-        vista.mostrarTodosApostado(modelo.totalApostadoTodos());
+        try {
+            vista.mostrarTodosApostado(modelo.totalApostadoTodos());
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorEstadisticas.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void mostrarTotalCobradoTodos() {
-        vista.mostrarTodosCobrado(modelo.totalCobradoTodos());
+        try {
+            vista.mostrarTodosCobrado(modelo.totalCobradoTodos());
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorEstadisticas.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void mostrarTotalApostado() {

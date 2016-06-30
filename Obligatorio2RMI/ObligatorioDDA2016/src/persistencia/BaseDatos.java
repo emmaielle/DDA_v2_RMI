@@ -21,7 +21,7 @@ public class BaseDatos {
     private Statement stmt;
     private static BaseDatos instancia = new BaseDatos(); 
 
-    private final String URL="jdbc:mysql://localhost/obligatoriodda2016";
+    private final String URL="jdbc:mysql://localhost:3306/obligatoriodda2016";
     private final String USER="root";
     private final String PASS="";
     

@@ -38,14 +38,12 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
     public ControladorMesa(VistaMesa vista, Mesa m, JugadorRuleta jr)throws RemoteException{
         try {
             this.vista = vista;
-            this.modelo=(Modelo)Naming.lookup("rmi://localhost/modelo");
+            this.modelo=(IModelo)Naming.lookup("rmi://localhost/modelo");
             this.jugador = jr;
             this.mesa= m;
             vista.mostrar(mesa.getNumeros());
             modelo.agregar(this);
-        } catch (NotBoundException ex) {
-            Logger.getLogger(ControladorMesa.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
+        } catch (NotBoundException | MalformedURLException ex) {
             Logger.getLogger(ControladorMesa.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -83,17 +81,29 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
     }
     
     public void apostar(String numero, Numero n, String v) throws InvalidUserActionException { 
-        modelo.apostar(numero, mesa, n, v, jugador);
-        vista.exitoApuesta();   
+        try {
+            modelo.apostar(numero, mesa, n, v, jugador);   
+            vista.exitoApuesta();
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorMesa.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void cargarJugadoresActivos() {
-        ArrayList<JugadorRuleta> j = modelo.getJugadoresPorMesa(mesa);
-        vista.mostrarJugadores(j);
+        try {
+            ArrayList<JugadorRuleta> j = modelo.getJugadoresPorMesa(mesa);
+            vista.mostrarJugadores(j);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorMesa.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void buscarNumeroActual() {
-        mostrarNumeroSorteado(modelo.ultNumeroSorteado(mesa).getValor());
+        try {
+            mostrarNumeroSorteado(modelo.ultNumeroSorteado(mesa).getValor());
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorMesa.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void mostrarNumeroSorteado(int i){
@@ -105,20 +115,30 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
     }
 
     public void finalizarApuesta()  { 
-        Numero sorteado = modelo.finalizarApuesta(mesa, jugador);
-        if(sorteado!= null){
-            vista.habilitar(true);
-            mesa.avisarCheckSaldo();
+        Numero sorteado;
+        try {
+            sorteado = modelo.finalizarApuesta(mesa, jugador);
+            if(sorteado!= null){
+                vista.habilitar(true);
+                mesa.avisarCheckSaldo();
+            }
+            else{
+                vista.habilitar(false);
+                jugador.setApostado(true);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorMesa.class.getName()).log(Level.SEVERE, null, ex);
         }
-        else{
-            vista.habilitar(false);
-            jugador.setApostado(true);
-        }
+        
     } 
 
     public void salirDeMesa() {
-        modelo.salirDeMesaRuleta(jugador, mesa);
-        //eliminarObservador();
+        try {
+            modelo.salirDeMesaRuleta(jugador, mesa);
+            //eliminarObservador();
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorMesa.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void mensajeRonda(){

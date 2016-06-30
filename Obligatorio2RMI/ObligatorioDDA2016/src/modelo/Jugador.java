@@ -5,6 +5,7 @@
  */
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -13,7 +14,7 @@ import java.util.Date;
  *
  * @author Euge
  */
-public class Jugador {
+public class Jugador implements Serializable{
     private int oid;
     private String nombre;
     private String password;

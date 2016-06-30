@@ -34,7 +34,7 @@ public class ControladorListaMesas extends UnicastRemoteObject implements Observ
 
     public ControladorListaMesas(Jugador j, VistaListaMesas vista) throws RemoteException {
         try {
-            this.modelo=(Modelo)Naming.lookup("rmi://localhost/modelo");
+            this.modelo=(IModelo)Naming.lookup("rmi://localhost/modelo");
             this.jugador= j;
             this.vista = vista;
             modelo.agregar(this);
@@ -50,32 +50,50 @@ public class ControladorListaMesas extends UnicastRemoteObject implements Observ
     public void crearMesa(String nom){
         Mesa m = new Mesa(nom);
         try{
-            modelo.agregarMesaRuleta(m, jugador, asignarColor(m));
-            vista.abrirMesa(m,jugador, false);
+            try {
+                modelo.agregarMesaRuleta(m, jugador, asignarColor(m));
+                vista.abrirMesa(m,jugador, false);
         }
         catch(InvalidUserActionException ex){
             vista.errorCrearMesa(ex.getMessage());
+        }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorListaMesas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
      public void unirseAmesa(String nom) throws InvalidUserActionException{
         String nameMesa = nom.split(",")[0];
-        Mesa m = modelo.buscarMesaRuleta(nameMesa);
+        Mesa m;
         try {
+            m = modelo.buscarMesaRuleta(nameMesa);
             modelo.unirJugadorAMesaRuleta(jugador, m, asignarColor(m));
             vista.abrirMesa(m, jugador, true);
         }
         catch (InvalidUserActionException ex){
             vista.errorCrearMesa(ex.getMessage());
         }
+        catch (RemoteException ex) {
+            Logger.getLogger(ControladorListaMesas.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void listarMesas(){
-        vista.mostrar(modelo.listarMesasRuleta());
+        try {
+            vista.mostrar(modelo.listarMesasRuleta());
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorListaMesas.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private Color asignarColor(Mesa m){
-        return modelo.asignarColorRuleta(m);
+        try {
+            return modelo.asignarColorRuleta(m);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorListaMesas.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+
     }
 
     public void salirDeJuego() {

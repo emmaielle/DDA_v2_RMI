@@ -33,31 +33,42 @@ public class ControladorJuegos extends UnicastRemoteObject implements Observador
     public ControladorJuegos(VistaJuegos v ,Jugador j)throws RemoteException{
         try {
             this.vista = v;
-            this.modelo=(Modelo)Naming.lookup("rmi://localhost/modelo");
+            this.modelo=(IModelo)Naming.lookup("rmi://localhost/modelo");
             modelo.agregar(this);
             jugador = j;
-        } catch (NotBoundException ex) {
-            Logger.getLogger(ControladorJuegos.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
+        } catch (NotBoundException | MalformedURLException ex) {
             Logger.getLogger(ControladorJuegos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     public void listarJuegos(){
-        ArrayList<String> juegos = modelo.getJuegos();
-        vista.mostrarJuegos(juegos);
+        try {
+            ArrayList<String> juegos = modelo.getJuegos();
+            vista.mostrarJuegos(juegos);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorJuegos.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void ingresarAjuego(String j){
-        Object juego = modelo.getJuego(j);
-        vista.abrirJuego(juego);
-        jugador.setEnJuego(true);
-        vista.habilitarIrAJuego(false);
+        Object juego;
+        try {
+            juego = modelo.getJuego(j);
+            vista.abrirJuego(juego);
+            jugador.setEnJuego(true);
+            vista.habilitarIrAJuego(false);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorJuegos.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void logout(){
-        modelo.logout(jugador);
-        jugador.setEnJuego(false);
+        try {
+            modelo.logout(jugador);
+            jugador.setEnJuego(false);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorJuegos.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 //    public void eliminarObservador() {

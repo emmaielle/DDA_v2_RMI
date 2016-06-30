@@ -26,9 +26,9 @@ public class Inicio {
             Modelo m = Modelo.getInstancia();
             cargarDatos(m);
             Naming.bind("modelo", m);
-            System.out.println("Listo!");
+            System.out.println("Sin errores al cargar el main");
         }catch(Exception e){
-            System.out.println("Error: " +e);
+            System.out.println("Error main: " + e);
         }
         
         

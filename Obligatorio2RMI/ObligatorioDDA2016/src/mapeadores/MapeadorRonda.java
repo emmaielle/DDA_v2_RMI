@@ -100,7 +100,7 @@ public class MapeadorRonda implements Persistente{
 
     @Override
     public void crearNuevo() {
-        //r = new Ronda(numRonda, null);
+        r = new Ronda();
     }
 
     @Override

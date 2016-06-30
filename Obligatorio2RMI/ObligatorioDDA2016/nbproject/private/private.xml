@@ -3,8 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Moi/Documents/DDA_ObligatorioRMI/Obligatorio2RMI/ObligatorioDDA2016/src/exceptions/InvalidUserActionException.java</file>
-            <file>file:/C:/Users/Moi/Documents/DDA_ObligatorioRMI/Obligatorio2RMI/ObligatorioDDA2016/src/modelo/Modelo.java</file>
+            <file>file:/C:/Users/Moi/Documents/DDA_ObligatorioRMI/Obligatorio2RMI/ObligatorioDDA2016/src/modelo/IModelo.java</file>
+            <file>file:/C:/Users/Moi/Documents/DDA_ObligatorioRMI/Obligatorio2RMI/ObligatorioDDA2016/src/vista/InicioCliente.java</file>
+            <file>file:/C:/Users/Moi/Documents/DDA_ObligatorioRMI/Obligatorio2RMI/ObligatorioDDA2016/src/modelo/Inicio.java</file>
         </group>
     </open-files>
 </project-private>

@@ -5,6 +5,7 @@
  */
 package modelo;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +18,7 @@ import java.util.logging.Logger;
  *
  * @author Euge
  */
-public class Ronda implements Observer{
+public class Ronda implements Observer, Serializable{
     private int oid;
     private int nroRonda;
     private ArrayList<Apuesta> apuestasGanadoras = new ArrayList<>();
@@ -27,17 +28,25 @@ public class Ronda implements Observer{
     private static int TIEMPO_LIMITE = 1; // minutos
     private Mesa mesa;
     private Date fechaYhoraFin;
-    private Proceso elProceso;
+    private IProceso elProceso;
 
 
     // <editor-fold defaultstate="collapsed" desc="Constructor">   
     public Ronda(int numRonda, Mesa m) {
         nroRonda = numRonda;
         mesa = m;
-        elProceso = new Proceso();
-        elProceso.addObserver(this);
-        elProceso.reset();
-        elProceso.ejecutar();
+        try {
+            elProceso = (IProceso) new Proceso();
+        } catch (RemoteException ex) {
+            Logger.getLogger(Ronda.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            elProceso.addObserver(this);
+            elProceso.reset();
+            elProceso.ejecutar();
+        } catch (RemoteException ex) {
+            Logger.getLogger(Ronda.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     public Ronda(){
         
@@ -103,7 +112,7 @@ public class Ronda implements Observer{
         this.nroGanador = nroGanador;
     }
 
-    public Proceso getElProceso() {
+    public IProceso getElProceso() {
         return elProceso;
     }
     
@@ -274,12 +283,20 @@ public class Ronda implements Observer{
     }
 
     public void stopProceso() {
-        elProceso.parar();
+        try {
+            elProceso.parar();
+        } catch (RemoteException ex) {
+            Logger.getLogger(Ronda.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 
     public void quitarObservador() {
-        elProceso.deleteObserver(this);
+        try {
+            elProceso.deleteObserver(this);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Ronda.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public Apuesta setApuestaByType(String numero, int monto, Jugador jugador, Numero n) {

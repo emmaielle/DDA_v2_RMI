@@ -55,15 +55,10 @@ public class Modelo extends ObservableRemotoV1 implements IModelo {
     
     
     // <editor-fold defaultstate="collapsed" desc="Metodos Sistema Jugador">   
-    @Override
-    public void agregar (Jugador j){
-        sj.agregar(j);
-        
-    }
 //    public void persistirJugadores(){
 //        sj.persistoJugadores();
 //    }
-    @Override
+    //@Override
     public void obtenerTodos(){
         sj.obtenerJugadores();
     }
@@ -74,59 +69,59 @@ public class Modelo extends ObservableRemotoV1 implements IModelo {
 //    }
 
     @Override
-    public boolean isHabilitado() {
+    public boolean isHabilitado() throws RemoteException {
         return sj.isHabilitado();
     }
 
     @Override
-    public Jugador login(String nom, String psw) throws InvalidUserActionException{
+    public Jugador login(String nom, String psw) throws RemoteException, InvalidUserActionException{
         return sj.login(nom,psw);
     }
     
     @Override
-    public void logout(Jugador j){
+    public void logout(Jugador j) throws RemoteException {
         sj.logout(j);
     }
     
     @Override
-    public long totalApostadoTodos() {
+    public long totalApostadoTodos() throws RemoteException {
         return sj.totalApostadoTodos();
     }
 
     @Override
-    public long totalCobradoTodos() {
+    public long totalCobradoTodos() throws RemoteException {
         return sj.totalCobradoTodos();
     }
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Metodos Casino"> 
     @Override
-    public ArrayList<String> getJuegos(){
+    public ArrayList<String> getJuegos() throws RemoteException{
         return casino.getJuegos();
     }
 
     @Override
-    public Object getJuego(String j) {
+    public Object getJuego(String j) throws RemoteException{
         return casino.getJuego(j);
     }
 
     @Override
-    public ArrayList<Mesa> listarMesasRuleta() {
+    public ArrayList<Mesa> listarMesasRuleta() throws RemoteException {
         return casino.getRuleta().getListadoMesas();
     }
 
     @Override
-    public void agregarMesaRuleta(Mesa m, Jugador j, Color c) throws InvalidUserActionException {
+    public void agregarMesaRuleta(Mesa m, Jugador j, Color c) throws InvalidUserActionException, RemoteException {
         casino.getRuleta().agregarMesaRuleta(m, j, c);
     }
 
     @Override
-    public Mesa buscarMesaRuleta(String nom){
+    public Mesa buscarMesaRuleta(String nom) throws RemoteException{
         return casino.getRuleta().buscarMesa(nom);
     }
 
     @Override
-    public void unirJugadorAMesaRuleta(Jugador j, Mesa m, Color c) throws InvalidUserActionException{
+    public void unirJugadorAMesaRuleta(Jugador j, Mesa m, Color c) throws RemoteException, InvalidUserActionException{
         casino.getRuleta().unirJugadorAMesaRuleta(j, m, c);
     }
     
@@ -134,22 +129,22 @@ public class Modelo extends ObservableRemotoV1 implements IModelo {
 
     // <editor-fold defaultstate="collapsed" desc="Metodos mesa">  
     @Override
-    public ArrayList<JugadorRuleta> getJugadoresPorMesa(Mesa m) {
+    public ArrayList<JugadorRuleta> getJugadoresPorMesa(Mesa m) throws RemoteException {
         return m.getTodosJugadoresEnMesa();
     }
 
     @Override
-    public Color asignarColorRuleta(Mesa m) {
+    public Color asignarColorRuleta(Mesa m) throws RemoteException{
         return m.getUnusedColour();
     }
 
     @Override
-    public Numero ultNumeroSorteado(Mesa m) {
+    public Numero ultNumeroSorteado(Mesa m) throws RemoteException{
         return m.getNumeroGanador();
     }
 
     @Override
-    public void apostar(String numero, Mesa mesa, Numero n, String v, JugadorRuleta jugador) throws InvalidUserActionException {
+    public void apostar(String numero, Mesa mesa, Numero n, String v, JugadorRuleta jugador) throws RemoteException, InvalidUserActionException {
         try {
             mesa.apostarUnNumero(numero, n, v, jugador);
         } catch (RemoteException ex) {
@@ -158,7 +153,7 @@ public class Modelo extends ObservableRemotoV1 implements IModelo {
     }  
 
     @Override
-    public Numero finalizarApuesta(Mesa mesa, JugadorRuleta jr) {
+    public Numero finalizarApuesta(Mesa mesa, JugadorRuleta jr)throws RemoteException {
         try {
             return mesa.finalizarApuesta(jr);
         } catch (RemoteException ex) {
@@ -168,7 +163,7 @@ public class Modelo extends ObservableRemotoV1 implements IModelo {
     }
 
     @Override
-    public void salirDeMesaRuleta(JugadorRuleta jugador, Mesa mesa) {
+    public void salirDeMesaRuleta(JugadorRuleta jugador, Mesa mesa) throws RemoteException{
         try {
             casino.getRuleta().quitarJugador(jugador, mesa);
         } catch (RemoteException ex) {
@@ -177,7 +172,7 @@ public class Modelo extends ObservableRemotoV1 implements IModelo {
     }
 
     @Override
-    public boolean estaEnEspera(JugadorRuleta jugador, Mesa mesa) {
+    public boolean estaEnEspera(JugadorRuleta jugador, Mesa mesa) throws RemoteException{
         return mesa.estaEnEspera(jugador);
     }
     // </editor-fold>

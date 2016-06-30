@@ -6,12 +6,13 @@
 package modelo;
 
 import java.awt.Color;
+import java.io.Serializable;
 
 /**
  *
  * @author Euge
  */
-public class Numero {
+public class Numero implements Serializable{
     private int valor;
     private Color color; // el color por defecto
     private Apuesta apuesta;

@@ -7,6 +7,7 @@ package modelo;
 
 import exceptions.InvalidUserActionException;
 import java.awt.Color;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import observadorRemoto.ObservableRemoto;
 
@@ -15,24 +16,23 @@ import observadorRemoto.ObservableRemoto;
  * @author Euge
  */
 public interface IModelo extends ObservableRemoto{
-    public void agregar(Jugador j);
-    public void obtenerTodos();
-    public boolean isHabilitado();
-    public Jugador login(String nom, String psw) throws InvalidUserActionException;
-    public void logout(Jugador j);
-    public long totalApostadoTodos();
-    public long totalCobradoTodos();
-    public ArrayList<String> getJuegos();
-    public Object getJuego(String j);
-    public ArrayList<Mesa> listarMesasRuleta();
-    public void agregarMesaRuleta(Mesa m, Jugador j, Color c) throws InvalidUserActionException;
-    public Mesa buscarMesaRuleta(String nom);
-    public void unirJugadorAMesaRuleta(Jugador j, Mesa m, Color c) throws InvalidUserActionException;
-    public ArrayList<JugadorRuleta> getJugadoresPorMesa(Mesa m);
-    public Color asignarColorRuleta(Mesa m);
-    public Numero ultNumeroSorteado(Mesa m);
-    public void apostar(String numero, Mesa mesa, Numero n, String v, JugadorRuleta jugador) throws InvalidUserActionException;
-    public Numero finalizarApuesta(Mesa mesa, JugadorRuleta jr);
-    public void salirDeMesaRuleta(JugadorRuleta jugador, Mesa mesa);
-    public boolean estaEnEspera(JugadorRuleta jugador, Mesa mesa);
+//    public void obtenerTodos();
+    public boolean isHabilitado() throws RemoteException;
+    public Jugador login(String nom, String psw) throws InvalidUserActionException, RemoteException;
+    public void logout(Jugador j) throws RemoteException;
+    public long totalApostadoTodos() throws RemoteException;
+    public long totalCobradoTodos() throws RemoteException;
+    public ArrayList<String> getJuegos() throws RemoteException;
+    public Object getJuego(String j) throws RemoteException;
+    public ArrayList<Mesa> listarMesasRuleta() throws RemoteException;
+    public void agregarMesaRuleta(Mesa m, Jugador j, Color c) throws InvalidUserActionException, RemoteException;
+    public Mesa buscarMesaRuleta(String nom) throws RemoteException;
+    public void unirJugadorAMesaRuleta(Jugador j, Mesa m, Color c) throws InvalidUserActionException, RemoteException;
+    public ArrayList<JugadorRuleta> getJugadoresPorMesa(Mesa m) throws RemoteException;
+    public Color asignarColorRuleta(Mesa m) throws RemoteException;
+    public Numero ultNumeroSorteado(Mesa m) throws RemoteException;
+    public void apostar(String numero, Mesa mesa, Numero n, String v, JugadorRuleta jugador) throws InvalidUserActionException, RemoteException;
+    public Numero finalizarApuesta(Mesa mesa, JugadorRuleta jr) throws RemoteException;
+    public void salirDeMesaRuleta(JugadorRuleta jugador, Mesa mesa) throws RemoteException;
+    public boolean estaEnEspera(JugadorRuleta jugador, Mesa mesa) throws RemoteException;
 }

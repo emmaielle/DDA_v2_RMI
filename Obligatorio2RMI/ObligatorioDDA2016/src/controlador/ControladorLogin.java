@@ -32,24 +32,27 @@ public class ControladorLogin extends UnicastRemoteObject implements ObservadorR
     public ControladorLogin(VistaLogin vista) throws RemoteException{
         try {
             this.vista = vista;
-            this.modelo=(Modelo)Naming.lookup("rmi://localhost/modelo");
+            this.modelo=(IModelo)Naming.lookup("rmi://localhost/modelo");
             modelo.agregar(this);
             vista.habilitar(modelo.isHabilitado());
-        } catch (NotBoundException ex) {
-            Logger.getLogger(ControladorLogin.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
+        } catch (NotBoundException | MalformedURLException ex) {
             Logger.getLogger(ControladorLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
     
     public void login(String usr,String pass) throws InvalidUserActionException{ 
-        Jugador j = modelo.login(usr, pass);
-        if(j == null){
-            vista.errorLogin();
-        }
-        else{
-            vista.ingresarJugador(j);
+        Jugador j;
+        try {
+            j = modelo.login(usr, pass);
+            if(j == null){
+                vista.errorLogin();
+            }
+            else{
+                vista.ingresarJugador(j);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 //

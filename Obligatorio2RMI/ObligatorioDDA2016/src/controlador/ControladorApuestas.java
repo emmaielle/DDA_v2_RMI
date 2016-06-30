@@ -34,7 +34,7 @@ public class ControladorApuestas extends UnicastRemoteObject implements Observad
     public ControladorApuestas(VistaApuestas vista, Jugador j) throws RemoteException {
         try {
             this.vista = vista;
-            this.modelo=(Modelo)Naming.lookup("rmi://localhost/modelo");
+            this.modelo=(IModelo)Naming.lookup("rmi://localhost/modelo");
             this.j = j;
             modelo.agregar(this);
         } catch (NotBoundException | MalformedURLException ex) {
