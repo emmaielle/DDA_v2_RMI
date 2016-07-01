@@ -9,7 +9,10 @@ import exceptions.InvalidUserActionException;
 import java.awt.Color;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mapeadores.MapeadorJugador;
 import mapeadores.MapeadorRonda;
 import persistencia.BaseDatos;
@@ -18,7 +21,7 @@ import persistencia.BaseDatos;
  *
  * @author Euge
  */
-public class Mesa implements Serializable{
+public class Mesa extends UnicastRemoteObject implements MesaRemoto {
     private String nombre;
     private ArrayList<JugadorRuleta> jugadoresEspera = new ArrayList<>();
     private ArrayList<JugadorRuleta> jugadoresMesa = new ArrayList();
@@ -28,7 +31,7 @@ public class Mesa implements Serializable{
     private int cantFinalizados;
     
     // <editor-fold defaultstate="collapsed" desc="Constructor">   
-    public Mesa(String nombre) {
+    public Mesa(String nombre) throws RemoteException {
         this.nombre = nombre;
         initMesa();
     }
@@ -126,10 +129,10 @@ public class Mesa implements Serializable{
 
     public JugadorRuleta buscarJugador(Jugador j){
         for(JugadorRuleta jr:jugadoresMesa){
-            if(jr.getJugador()==j) return jr;     
+            if(jr.getJugador().equals(j)) return jr;     
         }
         for(JugadorRuleta jr: jugadoresEspera){
-            if(jr.getJugador()==j) return jr;
+            if(jr.getJugador().equals(j)) return jr;
         }
         return null;
     }
@@ -178,7 +181,8 @@ public class Mesa implements Serializable{
             buscarRonda(getUltimaRonda()).stopProceso();
         }
         
-        Ronda ronda = new Ronda(getUltimaRonda() + 1, this);
+        Ronda ronda;
+        ronda = new Ronda(getUltimaRonda() + 1, this);
         rondas.add(ronda);
         cantFinalizados=0;
     }

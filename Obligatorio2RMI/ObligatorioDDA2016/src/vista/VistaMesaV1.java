@@ -20,6 +20,7 @@ import javax.swing.JSplitPane;
 import modelo.Jugador;
 import modelo.JugadorRuleta;
 import modelo.Mesa;
+import modelo.MesaRemoto;
 import modelo.Numero;
 
 /**
@@ -34,7 +35,7 @@ public class VistaMesaV1 extends javax.swing.JDialog implements VistaMesa, Actio
     private PanelDatos top;
 
 
-    public VistaMesaV1(Mesa m, Jugador j) {
+    public VistaMesaV1(MesaRemoto m, Jugador j) {
         try {
             initComponents();
             setTitle("Mesa: " + m.getNombre()+ " - Jugador: " + j.getNombreCompleto());

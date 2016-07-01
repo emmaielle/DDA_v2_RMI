@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class JuegoRuleta implements Serializable {
 
     private static final JuegoRuleta instancia = new JuegoRuleta();
-    private ArrayList<Mesa> listadoMesas = new ArrayList();
+    private ArrayList<MesaRemoto> listadoMesas = new ArrayList();
     
     private JuegoRuleta() {
     }
@@ -29,37 +29,37 @@ public class JuegoRuleta implements Serializable {
 
     // <editor-fold defaultstate="collapsed" desc="Getters y setters"> 
 
-    public ArrayList<Mesa> getListadoMesas() {
+    public ArrayList<MesaRemoto> getListadoMesas() {
         return listadoMesas;
     }
 
-    public void setListadoMesas(ArrayList<Mesa> listadoMesas) {
+    public void setListadoMesas(ArrayList<MesaRemoto> listadoMesas) {
         this.listadoMesas = listadoMesas;
     }
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Metodos">
-    public void agregar(Mesa m) throws InvalidUserActionException{
+    public void agregar(MesaRemoto m) throws InvalidUserActionException{
         if(listadoMesas.contains(m))throw new InvalidUserActionException("La mesa ya existe");
         listadoMesas.add(m);
         Modelo.getInstancia().notificar(Modelo.EVENTO_NUEVA_MESA);
     }
     
-    public void cerrarMesa(Mesa m){
+    public void cerrarMesa(MesaRemoto m) throws RemoteException{
         listadoMesas.remove(m);
         (m.buscarRonda(m.getUltimaRonda())).stopProceso();
         Modelo.getInstancia().notificar(Modelo.EVENTO_SALIR_MESA);
     }
     
-    public Mesa buscarMesa(String nom) {
-        for (Mesa m: this.listadoMesas){
+    public MesaRemoto buscarMesa(String nom) throws RemoteException {
+        for (MesaRemoto m: this.listadoMesas){
             if (m.getNombre().equals(nom)) return m;
         }
         // return null or throw exception
         return null;
     }
 
-    public void unirJugadorAMesaRuleta(Jugador j, Mesa m, Color c) throws InvalidUserActionException {
+    public void unirJugadorAMesaRuleta(Jugador j, MesaRemoto m, Color c) throws InvalidUserActionException, RemoteException {
         if (m != null) {
             if (m.getTodosJugadoresEnMesa().size() == 4) throw new InvalidUserActionException("Esta mesa ya contiene el maxino numero de jugadores posible");
             if (j.isEnMesa()) throw new InvalidUserActionException("Jugador ya se encuentra en una mesa");
@@ -67,7 +67,7 @@ public class JuegoRuleta implements Serializable {
         }
     }
 
-    public void agregarMesaRuleta(Mesa m, Jugador j, Color c) throws InvalidUserActionException {
+    public void agregarMesaRuleta(MesaRemoto m, Jugador j, Color c) throws InvalidUserActionException, RemoteException {
         if (j.isEnMesa()) throw new InvalidUserActionException("Jugador ya se encuentra en una mesa");
         if (m.validar()){
             m.agregarJugador(c, j); // lista de jugadores en mesa
@@ -75,7 +75,7 @@ public class JuegoRuleta implements Serializable {
         }
     }
     
-    public void quitarJugador(JugadorRuleta jugador, Mesa mesa) throws RemoteException {
+    public void quitarJugador(JugadorRuleta jugador, MesaRemoto mesa) throws RemoteException {
         mesa.quitarJugador(jugador);
         if (mesa.getTodosJugadoresEnMesa().isEmpty()) cerrarMesa(mesa); 
     }

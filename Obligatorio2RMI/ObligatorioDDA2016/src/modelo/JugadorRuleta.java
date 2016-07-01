@@ -7,6 +7,7 @@ package modelo;
 
 import java.awt.Color;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *
@@ -14,7 +15,7 @@ import java.io.Serializable;
  */
 public class JugadorRuleta implements Serializable{
     private Color color;
-    private Mesa mesa;
+    private transient Mesa mesa;
     private Jugador jugador;
     private boolean apostado;
     private int rondasSinApostar;
@@ -99,7 +100,21 @@ public class JugadorRuleta implements Serializable{
         return this.rondasSinApostar > 2;
     }
     
+    
+    
     // </editor-fold>
+
+    @Override
+    public boolean equals(Object obj) {
+        return ((JugadorRuleta)obj).getJugador().equals(this.getJugador());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 83 * hash + Objects.hashCode(this.jugador);
+        return hash;
+    }
 
 
 }

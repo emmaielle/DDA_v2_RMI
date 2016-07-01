@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.Jugador;
 import modelo.Mesa;
+import modelo.MesaRemoto;
 
 /**
  *
@@ -137,12 +138,12 @@ public class VistaListaMesasV1 extends javax.swing.JDialog implements VistaLista
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void mostrar(ArrayList<Mesa> lista) {
+    public void mostrar(ArrayList<MesaRemoto> lista) {
         list_mesas.setListData(lista.toArray());
     }
 
     @Override
-    public void abrirMesa(Mesa m, Jugador j, boolean enEspera) {
+    public void abrirMesa(MesaRemoto m, Jugador j, boolean enEspera) {
         vistaMesa = new VistaMesaV1(m, j);
         vistaMesa.setVisible(true);
         vistaMesa.setLocationRelativeTo(null);

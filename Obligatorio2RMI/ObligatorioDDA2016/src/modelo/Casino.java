@@ -5,7 +5,10 @@
  */
 package modelo;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -47,4 +50,15 @@ public class Casino {
         return ruleta;
     }
     // </editor-fold>
+
+    public Mesa crearYAgregarAMesa(Jugador j, String n) {
+        Mesa m = null;
+        try {
+            m = new Mesa(n);
+            m.agregarJugador(m.getUnusedColour(), j);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Casino.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return m;
+    }
 }

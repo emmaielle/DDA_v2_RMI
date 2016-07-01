@@ -7,6 +7,7 @@ package modelo;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Observer;
@@ -18,7 +19,7 @@ import java.util.logging.Logger;
  *
  * @author Euge
  */
-public class Ronda implements Observer, Serializable{
+public class Ronda  implements Serializable, Observer{
     private int oid;
     private int nroRonda;
     private ArrayList<Apuesta> apuestasGanadoras = new ArrayList<>();
@@ -26,9 +27,9 @@ public class Ronda implements Observer, Serializable{
     //private String colorGanador; ///
     private ArrayList<Apuesta> apuestas = new ArrayList<>();
     private static int TIEMPO_LIMITE = 1; // minutos
-    private Mesa mesa;
+    private transient Mesa mesa;
     private Date fechaYhoraFin;
-    private IProceso elProceso;
+    private Proceso elProceso;
 
 
     // <editor-fold defaultstate="collapsed" desc="Constructor">   
@@ -36,7 +37,7 @@ public class Ronda implements Observer, Serializable{
         nroRonda = numRonda;
         mesa = m;
         try {
-            elProceso = (IProceso) new Proceso();
+            elProceso = (Proceso) new Proceso();
         } catch (RemoteException ex) {
             Logger.getLogger(Ronda.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -48,7 +49,7 @@ public class Ronda implements Observer, Serializable{
             Logger.getLogger(Ronda.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public Ronda(){
+    public Ronda() throws RemoteException{
         
     }
     
@@ -112,7 +113,7 @@ public class Ronda implements Observer, Serializable{
         this.nroGanador = nroGanador;
     }
 
-    public IProceso getElProceso() {
+    public Proceso getElProceso() {
         return elProceso;
     }
     

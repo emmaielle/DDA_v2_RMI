@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import modelo.IModelo;
 import modelo.JugadorRuleta;
 import modelo.Mesa;
+import modelo.MesaRemoto;
 import modelo.Modelo;
 import modelo.Numero;
 import observadorRemoto.ObservableRemoto;
@@ -33,9 +34,9 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
     private IModelo modelo = Modelo.getInstancia();
     private VistaMesa vista;
     private JugadorRuleta jugador;
-    private Mesa mesa;
+    private MesaRemoto mesa;
     
-    public ControladorMesa(VistaMesa vista, Mesa m, JugadorRuleta jr)throws RemoteException{
+    public ControladorMesa(VistaMesa vista, MesaRemoto m, JugadorRuleta jr)throws RemoteException{
         try {
             this.vista = vista;
             this.modelo=(IModelo)Naming.lookup("rmi://localhost/modelo");
@@ -141,7 +142,7 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
         }
     }
     
-    public void mensajeRonda(){
+    public void mensajeRonda() throws RemoteException{
         String msj = (mesa.estaEnEspera(jugador)) ? "Espera..." : "Apostar";
         vista.mensajeRonda(msj);
     }

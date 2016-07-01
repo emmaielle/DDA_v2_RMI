@@ -8,14 +8,15 @@ package controlador;
 import java.util.ArrayList;
 import modelo.Jugador;
 import modelo.Mesa;
+import modelo.MesaRemoto;
 
 /**
  *
  * @author Euge
  */
 public interface VistaListaMesas {
-    public void mostrar(ArrayList<Mesa> lista);
-    public void abrirMesa(Mesa m,Jugador jr, boolean enEspera);
+    public void mostrar(ArrayList<MesaRemoto> lista);
+    public void abrirMesa(MesaRemoto m,Jugador jr, boolean enEspera);
     public void salirDeJuego();
     public void errorCrearMesa(String msg);
     public void ingresarMesa();

@@ -7,7 +7,7 @@ package modelo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Objects;
 
 
 /**
@@ -185,5 +185,19 @@ public class Jugador implements Serializable{
     public void quitarApuesta(Apuesta a){
         if (getApuestas().contains(a)) getApuestas().remove(a);
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (((Jugador)obj).getNombreCompleto().equals(this.getNombreCompleto())){
+            return true;
+        }
+        return false;
+    }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.nombreCompleto);
+        return hash;
+    }
 }

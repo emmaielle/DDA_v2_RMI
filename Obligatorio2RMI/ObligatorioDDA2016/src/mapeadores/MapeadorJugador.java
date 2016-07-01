@@ -5,10 +5,12 @@
  */
 package mapeadores;
 
+import java.rmi.RemoteException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modelo.Jugador;
 import modelo.Ronda;
 import persistencia.Persistente;
@@ -89,13 +91,18 @@ public class MapeadorJugador implements Persistente {
                 int monto = rs.getInt("monto");
                 int ganado = rs.getInt("montoGanado");
 
-                Ronda r = new Ronda();
+                Ronda r;
+                    r = new Ronda();
+                
                 r.setOid(oidRonda);
                 j.agregarApuesta(num,monto,r,ganado);
             }
             
         } catch (SQLException ex) {
             System.out.println("Error al leer usuario:" + ex.getMessage());
+        }
+         catch (RemoteException ex) {
+            Logger.getLogger(MapeadorJugador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

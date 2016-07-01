@@ -13,12 +13,12 @@ import java.util.Date;
  *
  * @author Euge
  */
-public abstract class Apuesta implements ApuestaRemoto {
+public abstract class Apuesta implements Serializable {
     private int oid;
     private int monto;
     private  Jugador jugador;
     private String numero;
-    private  Ronda ronda;
+    private transient Ronda ronda;
     private final Date fechaHora;
     private int montoGanado;
 

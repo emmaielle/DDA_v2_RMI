@@ -5,11 +5,14 @@
  */
 package mapeadores;
 
+import java.rmi.RemoteException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modelo.Apuesta;
 import modelo.Mesa;
 import modelo.Numero;
@@ -89,18 +92,24 @@ public class MapeadorRonda implements Persistente{
             if (r.getOid() != 0){
                 r.setOid(rs.getInt("oid"));
                 r.setFechaYhoraFin(new Date(rs.getTimestamp("fechaYhoraFin").getTime()));
-                r.setMesa(new Mesa(rs.getString("nomMesa"))); 
+                r.setMesa(new Mesa(rs.getString("nomMesa")));
                 int valor = rs.getInt("nroSorteado");
                 r.setNroGanador(new Numero(valor));
             }
         } catch (SQLException ex) {
             System.out.println("Error al leer la ronda:" + ex.getMessage());
+        } catch (RemoteException ex) {
+            Logger.getLogger(MapeadorRonda.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
     public void crearNuevo() {
-        r = new Ronda();
+        try {
+            r = new Ronda();
+        } catch (RemoteException ex) {
+            Logger.getLogger(MapeadorRonda.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

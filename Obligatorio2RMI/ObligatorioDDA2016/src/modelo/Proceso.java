@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author Moi
  */
-public class Proceso extends UnicastRemoteObject implements Runnable, IProceso{
+public class Proceso implements Runnable, Serializable{
 
     public static final int EVENTO_ADD_SECONDS = 1;
     public static final int EVENTO_TIME_OUT = 2;
@@ -30,17 +30,14 @@ public class Proceso extends UnicastRemoteObject implements Runnable, IProceso{
         
     }
 
-    @Override
     public int getSegundos() throws RemoteException {
         return segundos;
     }    
     
-    @Override
     public synchronized void addObserver(Observer o) throws RemoteException {
         observable.addObserver(o);
     }
 
-    @Override
     public synchronized void deleteObserver(Observer o) throws RemoteException {
         observable.deleteObserver(o);
     }
@@ -48,7 +45,6 @@ public class Proceso extends UnicastRemoteObject implements Runnable, IProceso{
         observable.avisar(evento);
     }
 
-    @Override
     public void ejecutar() throws RemoteException{
         if(!ejecutar ){
             ejecutar = true;
@@ -57,14 +53,12 @@ public class Proceso extends UnicastRemoteObject implements Runnable, IProceso{
         }
     }
 
-    @Override
     public void parar() throws RemoteException{
         ejecutar=false;
         //para cortar el sleep
         hilo.interrupt();
     }
     
-    @Override
     public void reset() throws RemoteException{
         segundos = 0;
         avisar(Proceso.EVENTO_ADD_SECONDS);

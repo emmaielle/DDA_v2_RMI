@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import modelo.IModelo;
 import modelo.Jugador;
 import modelo.Mesa;
+import modelo.MesaRemoto;
 import modelo.Modelo;
 import observadorRemoto.ObservableRemoto;
 import observadorRemoto.ObservadorRemoto;
@@ -39,39 +40,33 @@ public class ControladorListaMesas extends UnicastRemoteObject implements Observ
             this.vista = vista;
             modelo.agregar(this);
             listarMesas();
-        } catch (NotBoundException ex) {
-            Logger.getLogger(ControladorListaMesas.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
+        } catch (NotBoundException | MalformedURLException ex) {
             Logger.getLogger(ControladorListaMesas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     
     public void crearMesa(String nom){
-        Mesa m = new Mesa(nom);
-        try{
-            try {
-                modelo.agregarMesaRuleta(m, jugador, asignarColor(m));
-                vista.abrirMesa(m,jugador, false);
-        }
-        catch(InvalidUserActionException ex){
-            vista.errorCrearMesa(ex.getMessage());
-        }
+        MesaRemoto m;
+        try {
+            m = modelo.nuevaMesa(nom, jugador);
+
+        vista.abrirMesa(m,jugador, false);
         } catch (RemoteException ex) {
             Logger.getLogger(ControladorListaMesas.class.getName()).log(Level.SEVERE, null, ex);
         }
+        catch (InvalidUserActionException ex) {
+           Logger.getLogger(ControladorListaMesas.class.getName()).log(Level.SEVERE, null, ex);
+       }
     }
     
      public void unirseAmesa(String nom) throws InvalidUserActionException{
         String nameMesa = nom.split(",")[0];
-        Mesa m;
+        MesaRemoto m;
         try {
             m = modelo.buscarMesaRuleta(nameMesa);
             modelo.unirJugadorAMesaRuleta(jugador, m, asignarColor(m));
             vista.abrirMesa(m, jugador, true);
-        }
-        catch (InvalidUserActionException ex){
-            vista.errorCrearMesa(ex.getMessage());
         }
         catch (RemoteException ex) {
             Logger.getLogger(ControladorListaMesas.class.getName()).log(Level.SEVERE, null, ex);
@@ -86,7 +81,7 @@ public class ControladorListaMesas extends UnicastRemoteObject implements Observ
         }
     }
     
-    private Color asignarColor(Mesa m){
+    private Color asignarColor(MesaRemoto m){
         try {
             return modelo.asignarColorRuleta(m);
         } catch (RemoteException ex) {
@@ -99,10 +94,6 @@ public class ControladorListaMesas extends UnicastRemoteObject implements Observ
     public void salirDeJuego() {
         jugador.setEnJuego(false);
     }
-
-//    public void eliminarObservador() {
-//        modelo.deleteObserver(this);
-//    }
 
     public void verApuestas() {
         vista.verApuestas(jugador);
