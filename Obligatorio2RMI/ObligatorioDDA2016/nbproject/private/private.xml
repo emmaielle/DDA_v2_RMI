@@ -3,9 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Moi/Documents/DDA_ObligatorioRMI/Obligatorio2RMI/ObligatorioDDA2016/src/modelo/IModelo.java</file>
-            <file>file:/C:/Users/Moi/Documents/DDA_ObligatorioRMI/Obligatorio2RMI/ObligatorioDDA2016/src/vista/InicioCliente.java</file>
-            <file>file:/C:/Users/Moi/Documents/DDA_ObligatorioRMI/Obligatorio2RMI/ObligatorioDDA2016/src/modelo/Inicio.java</file>
+            <file>file:/C:/Users/Euge/Desktop/Obligatorio2RMI/DDA_v2_RMI/Obligatorio2RMI/ObligatorioDDA2016/src/controlador/ControladorListaMesas.java</file>
+            <file>file:/C:/Users/Euge/Desktop/Obligatorio2RMI/DDA_v2_RMI/Obligatorio2RMI/ObligatorioDDA2016/src/controlador/ControladorMesa.java</file>
+            <file>file:/C:/Users/Euge/Desktop/Obligatorio2RMI/DDA_v2_RMI/Obligatorio2RMI/ObligatorioDDA2016/src/modelo/JuegoRuleta.java</file>
+            <file>file:/C:/Users/Euge/Desktop/Obligatorio2RMI/DDA_v2_RMI/Obligatorio2RMI/ObligatorioDDA2016/src/modelo/Proceso.java</file>
+            <file>file:/C:/Users/Euge/Desktop/Obligatorio2RMI/DDA_v2_RMI/Obligatorio2RMI/ObligatorioDDA2016/src/modelo/Modelo.java</file>
+            <file>file:/C:/Users/Euge/Desktop/Obligatorio2RMI/DDA_v2_RMI/Obligatorio2RMI/ObligatorioDDA2016/src/modelo/ModeloRemoto.java</file>
+            <file>file:/C:/Users/Euge/Desktop/Obligatorio2RMI/DDA_v2_RMI/Obligatorio2RMI/ObligatorioDDA2016/src/modelo/Apuesta.java</file>
         </group>
     </open-files>
 </project-private>
