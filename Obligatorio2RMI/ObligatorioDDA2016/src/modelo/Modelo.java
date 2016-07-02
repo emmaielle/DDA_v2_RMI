@@ -18,7 +18,6 @@ import observadorRemoto.ObservableRemotoV1;
  * @author Euge
  */
 public class Modelo extends ObservableRemotoV1 implements ModeloRemoto {
-        
     private SistemaJugador sj = SistemaJugador.getInstancia();
     private Casino casino = Casino.getInstancia();
     private static Modelo instancia;
@@ -38,7 +37,7 @@ public class Modelo extends ObservableRemotoV1 implements ModeloRemoto {
     public static final int EVENTO_APUESTASWINDOW = 14;
 
     
-    public static Modelo getInstancia(){
+    protected static Modelo getInstancia(){
         if (instancia == null){
             try {
                 instancia = new Modelo();
@@ -177,6 +176,11 @@ public class Modelo extends ObservableRemotoV1 implements ModeloRemoto {
     @Override
     public Jugador getJugador(int oid) throws RemoteException {
         return sj.getJugador(oid);
+    }
+
+    @Override
+    public void setStatsOn(Jugador jugador, boolean habilitar) throws RemoteException {
+        sj.setStatsOn(!habilitar, jugador);
     }
 
 

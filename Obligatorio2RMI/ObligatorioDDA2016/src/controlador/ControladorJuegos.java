@@ -34,8 +34,8 @@ public class ControladorJuegos extends UnicastRemoteObject implements Observador
         try {
             this.vista = v;
             this.modelo=(ModeloRemoto)Naming.lookup("rmi://localhost/modelo");
-            modelo.agregar(this);
             jugador = j;
+            modelo.agregar(this);
         } catch (NotBoundException | MalformedURLException ex) {
             Logger.getLogger(ControladorJuegos.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -84,7 +84,6 @@ public class ControladorJuegos extends UnicastRemoteObject implements Observador
             this.listarJuegos();
         }
         else if (param.equals(Modelo.EVENTO_STATSWINDOW)){
-            // traer jugador
             jugador = modelo.getJugador(jugador.getOid());
             if(jugador.isStatsOn()) {
                 vista.habilitarEstadisticas(false);

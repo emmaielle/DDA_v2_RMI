@@ -34,9 +34,7 @@ public class ControladorEstadisticas extends UnicastRemoteObject implements Obse
             this.modelo = (ModeloRemoto)Naming.lookup("rmi://localhost/modelo");
             this.jugador = jugador;
             modelo.agregar(this);
-        } catch (NotBoundException ex) {
-            Logger.getLogger(ControladorEstadisticas.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
+        } catch (NotBoundException | MalformedURLException ex) {
             Logger.getLogger(ControladorEstadisticas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -65,8 +63,8 @@ public class ControladorEstadisticas extends UnicastRemoteObject implements Obse
         vista.mostrarTotalCobrado(jugador.getTotalCobrado());
     }
 
-    public void habilitarStats(boolean habilitar) {
-        jugador.setStatsOn(!habilitar);
+    public void habilitarStats(boolean habilitar) throws RemoteException {
+        modelo.setStatsOn(jugador, habilitar);
     }
 
 //    public void eliminarObservador() {

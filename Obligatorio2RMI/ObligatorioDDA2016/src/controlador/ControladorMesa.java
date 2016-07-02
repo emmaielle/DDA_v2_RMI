@@ -30,7 +30,7 @@ import modelo.TipoJugador;
  */
 public class ControladorMesa extends UnicastRemoteObject implements ObservadorRemoto {
 
-    private ModeloRemoto modelo = Modelo.getInstancia();
+    private ModeloRemoto modelo;
     private VistaMesa vista;
     private TipoJugador jugador;
     private MesaRemoto mesa;
@@ -89,10 +89,9 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
             vista.mostrarSaldo(jugador.getJugador().getSaldo());
     }
     
-    public void apostar(String numero, Numero n, String v) throws InvalidUserActionException, RemoteException { 
-            
+    public void apostar(String numero, Numero n, String v) throws InvalidUserActionException, RemoteException {             
         modelo.apostar(numero, mesa, n, v, jugador);   
-            vista.exitoApuesta();
+        vista.exitoApuesta();
     }
 
     public void cargarJugadoresActivos() {
@@ -141,7 +140,7 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
     public void salirDeMesa() {
         try {
             modelo.salirDeMesaRuleta(jugador, mesa);
-            //eliminarObservador();
+            eliminarObservador();
         } catch (RemoteException ex) {
             Logger.getLogger(ControladorMesa.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -152,9 +151,13 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
         vista.mensajeRonda(msj);
     }
     
-//    public void eliminarObservador() {
-//        modelo.deleteObserver(this);
-//    }
+    public void eliminarObservador() {
+        try {
+            modelo.quitar(this);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorMesa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public void colorJugador(Color color) {
         vista.colorJugador(color);
