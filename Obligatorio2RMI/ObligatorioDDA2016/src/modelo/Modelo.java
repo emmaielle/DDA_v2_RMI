@@ -38,7 +38,7 @@ public class Modelo extends ObservableRemotoV1 implements ModeloRemoto {
     public static final int EVENTO_APUESTASWINDOW = 14;
 
     
-    public static Modelo getInstancia(){
+    protected static Modelo getInstancia(){
         if (instancia == null){
             try {
                 instancia = new Modelo();

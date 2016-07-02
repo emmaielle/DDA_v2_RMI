@@ -41,7 +41,7 @@ public class PanelTablero extends javax.swing.JPanel {
             BotonRuleta b = new BotonRuleta(n.getValor() + "");
             if (n.getApuesta()!= null) {
                 JugadorRuleta jr = (JugadorRuleta)n.getApuesta().getJugador().getJugadorTipo();
-                b.setBackground(jr.getColor());            
+               b.setBackground(jr.getColor());            
             }
             else b.setBackground(n.getColor());
             
