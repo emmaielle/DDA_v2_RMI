@@ -30,7 +30,7 @@ import modelo.TipoJugador;
  */
 public class ControladorMesa extends UnicastRemoteObject implements ObservadorRemoto {
 
-    private ModeloRemoto modelo = Modelo.getInstancia();
+    private ModeloRemoto modelo;
     private VistaMesa vista;
     private TipoJugador jugador;
     private MesaRemoto mesa;
@@ -41,7 +41,7 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
             this.modelo=(ModeloRemoto)Naming.lookup("rmi://localhost/modelo");
             this.jugador = jr;
             this.mesa= m;
-            vista.mostrar(mesa.getNumeros());
+            mostrarNum();
             modelo.agregar(this);
         } catch (NotBoundException | MalformedURLException ex) {
             Logger.getLogger(ControladorMesa.class.getName()).log(Level.SEVERE, null, ex);
@@ -65,7 +65,7 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
             echarDeMesaPorNoJugar();
         }
         else if(param.equals(Modelo.EVENTO_TABLERO)){
-            vista.mostrar(mesa.getNumeros());
+            mostrarNum();
             long tot = mesa.buscarRonda(mesa.getUltimaRonda()).totalApostadoRonda(jugador.getJugador()); // mas limpio??
             vista.mostrarTotalApostado(tot);
         }
@@ -140,7 +140,7 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
     public void salirDeMesa() {
         try {
             modelo.salirDeMesaRuleta(jugador, mesa);
-            //eliminarObservador();
+            eliminarObservador();
         } catch (RemoteException ex) {
             Logger.getLogger(ControladorMesa.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -151,9 +151,13 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
         vista.mensajeRonda(msj);
     }
     
-//    public void eliminarObservador() {
-//        modelo.deleteObserver(this);
-//    }
+    public void eliminarObservador() {
+        try {
+            modelo.quitar(this);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorMesa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public void colorJugador(Color color) {
         vista.colorJugador(color);
@@ -170,5 +174,11 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
     private void resetButtons() {
         vista.resetButtons();
     }
-
+    public void mostrarNum(){
+        try {
+            vista.mostrar(mesa.getNumeros());
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorMesa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
