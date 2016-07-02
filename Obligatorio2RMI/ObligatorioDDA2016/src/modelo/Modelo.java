@@ -171,7 +171,7 @@ public class Modelo extends ObservableRemotoV1 implements ModeloRemoto {
 
     @Override
     public MesaRemoto nuevaMesa(String n, Jugador j) throws RemoteException, InvalidUserActionException {
-        return casino.crearYAgregarAMesa(j, n);
+        return casino.getRuleta().crearYAgregarAMesa(j, n);
     }
 
 

@@ -138,7 +138,15 @@ public class VistaListaMesasV1 extends javax.swing.JDialog implements VistaLista
 
     @Override
     public void mostrar(ArrayList<MesaRemoto> lista) {
-        list_mesas.setListData(lista.toArray());
+        ArrayList<String> listado = new ArrayList();
+        for(MesaRemoto mr: lista){
+            try {
+                listado.add(formatear(mr));
+            } catch (RemoteException ex) {
+                Logger.getLogger(VistaListaMesasV1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        list_mesas.setListData(listado.toArray());
     }
 
     @Override
@@ -208,6 +216,12 @@ public class VistaListaMesasV1 extends javax.swing.JDialog implements VistaLista
     @Override
     public void habilitarApuestas(boolean b) {
         btn_apuestas.setEnabled(b);
+    }
+
+    private String formatear(MesaRemoto mr) throws RemoteException {
+        String temp = mr.getNombre() + ", " + mr.getTodosJugadoresEnMesa().size();
+        if (mr.getTodosJugadoresEnMesa().size() == 1) return temp + " jugador";
+        else return temp + " jugadores"; 
     }
     
 }
