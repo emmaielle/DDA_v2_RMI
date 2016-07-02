@@ -78,6 +78,7 @@ public class ControladorJuegos extends UnicastRemoteObject implements Observador
     @Override
     public void actualizar(ObservableRemoto origen, Serializable param) throws RemoteException {
         if (param.equals(Modelo.EVENTO_JUEGO_CERRADO)){
+            jugador = modelo.getJugador(jugador.getOid());
             if(!jugador.isEnJuego()) vista.habilitarIrAJuego(true);
         }
         else if (param.equals(Modelo.EVENTO_NUEVA_MESA)){

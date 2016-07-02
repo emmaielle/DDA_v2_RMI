@@ -184,13 +184,17 @@ public class VistaListaMesasV1 extends javax.swing.JDialog implements VistaLista
     
     @Override
     public void salirDeJuego() {
-        controlador.salirDeJuego();
-        if(vistaMesa!=null){
-            vistaMesa.salirDeMesa(); 
-            vistaMesa.dispose();
-        }
-        if (vistaApuestas != null){
-            vistaApuestas.dispose();
+        try {
+            controlador.salirDeJuego();
+            if(vistaMesa!=null){
+                vistaMesa.salirDeMesa(); 
+                vistaMesa.dispose();
+            }
+            if (vistaApuestas != null){
+                vistaApuestas.dispose();
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(VistaListaMesasV1.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }

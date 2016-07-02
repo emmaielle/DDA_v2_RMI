@@ -180,9 +180,13 @@ public class Modelo extends ObservableRemotoV1 implements ModeloRemoto {
 
     @Override
     public void setStatsOn(Jugador jugador, boolean habilitar) throws RemoteException {
-        sj.setStatsOn(!habilitar, jugador);
+        sj.setStatsOn(habilitar, jugador);
     }
 
+    @Override
+    public void setEnJuego(Jugador jugador, boolean b) throws RemoteException {
+        sj.setEnJuego(jugador, b);
+    }
 
 
 }

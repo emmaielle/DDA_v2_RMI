@@ -143,7 +143,12 @@ public class SistemaJugador {
 
     void setStatsOn(boolean b, Jugador jugador) {
         Jugador j = buscarJugador(jugador.getNombre());
-        j.setStatsOn(!habilitado);
+        j.setStatsOn(!b);
+    }
+
+    void setEnJuego(Jugador jugador, boolean b) {
+        Jugador j = buscarJugador(jugador.getNombre());
+        j.setEnJuego(b);
     }
 
 }

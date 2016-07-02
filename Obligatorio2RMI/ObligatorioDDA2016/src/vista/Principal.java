@@ -25,7 +25,7 @@ public class Principal extends javax.swing.JFrame {
         finalizar = new javax.swing.JButton();
         ingresoCasino1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("INGRESO AL CASINO");
         getContentPane().setLayout(null);
 
