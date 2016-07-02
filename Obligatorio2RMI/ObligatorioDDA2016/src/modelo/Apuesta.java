@@ -6,8 +6,11 @@
 package modelo;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -106,13 +109,19 @@ public abstract class Apuesta implements Serializable {
 
     @Override
     public String toString() {
-         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");
+        String ret=null;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");
             SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm");
-            return "Mesa: " + this.getRonda().getMesa().getNombre() + "; Fecha: " +
+            ret= "Mesa: " + this.getRonda().getMesa().getNombre() + "; Fecha: " +
                     sdf.format(this.getFechaHora().getTime()) + "; Hora: " +
                     sdf1.format(this.getFechaHora().getTime())
                     + "; Numero: " + this.getNumero() + 
                     "; Monto ganado: " + this.getMontoGanado();
+        } catch (RemoteException ex) {
+            Logger.getLogger(Apuesta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ret;
     }
 
     public abstract String getTipo();

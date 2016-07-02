@@ -26,7 +26,7 @@ public class Ronda implements Serializable, Observer{
     //private String colorGanador; ///
     private ArrayList<Apuesta> apuestas = new ArrayList<>();
     private static int TIEMPO_LIMITE = 3; // minutos
-    private transient Mesa mesa;
+    private MesaRemoto mesa;
     private Date fechaYhoraFin;
     private Proceso elProceso;
 
@@ -63,7 +63,7 @@ public class Ronda implements Serializable, Observer{
         this.mesa = mesa;
     }
     
-    public Mesa getMesa() {
+    public MesaRemoto getMesa() {
         return mesa;
     }
     
@@ -183,7 +183,7 @@ public class Ronda implements Serializable, Observer{
         if (!areThereBetsInThisRondaForThisPlayer(j)) j.setRondasSinApostar(j.getRondasSinApostarAnterior());
     }
     
-    public void quitarApuesta(Apuesta a) {
+    public void quitarApuesta(Apuesta a) throws RemoteException {
         a.getJugador().modificarSaldo(true,a.getMonto());
         if (a instanceof ApuestaPleno){
             ((ApuestaPleno)a).getNumeroTablero().setApuesta(null);
@@ -197,7 +197,7 @@ public class Ronda implements Serializable, Observer{
         Modelo.getInstancia().notificar(Modelo.EVENTO_TABLERO);
     }
     
-    public void agregarApuesta(Apuesta a) {
+    public void agregarApuesta(Apuesta a) throws RemoteException {
         if (a instanceof ApuestaPleno){
             ((ApuestaPleno)a).getNumeroTablero().setApuesta(a);
             mesa.buscarNumeroEnTablero(((ApuestaPleno)a).getNumeroTablero().getValor()).setApuesta(a);

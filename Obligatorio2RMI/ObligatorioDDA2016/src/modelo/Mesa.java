@@ -106,9 +106,6 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
             }
             Modelo.getInstancia().notificar(Modelo.EVENTO_NUEVO_JUGADOR_MESA_RULETA);
             j.setEnMesa(true);
-//        } catch (RemoteException ex) {
-//            Logger.getLogger(Mesa.class.getName()).log(Level.SEVERE, null, ex);
-//        }
     }
     
     public void quitarJugador(TipoJugador j) throws RemoteException{
