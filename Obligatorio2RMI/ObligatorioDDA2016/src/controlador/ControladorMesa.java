@@ -70,6 +70,7 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
             vista.mostrarTotalApostado(tot);
         }
         else if(param.equals(Modelo.EVENTO_SORTEARNUMERO)){            
+            jugador = mesa.buscarJugador(jugador.getJugador());
             buscarNumeroActual();
             if (!modelo.estaEnEspera(jugador, mesa))  vista.habilitar(true);
             mensajeRonda();
@@ -80,6 +81,7 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
             vista.mostrarJugadores(modelo.getJugadoresPorMesa(mesa));
         }
         else if (param.equals(Modelo.EVENTO_CHECK_SALDOS)){
+            jugador = mesa.buscarJugador(jugador.getJugador());
             if (jugador.expulsado()) vista.cerrarVentana("Se le terminó el saldo");
         }
         else if(param.equals(Modelo.EVENTO_ACTUALIZA_SALDOS))
@@ -88,7 +90,8 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
     }
     
     public void apostar(String numero, Numero n, String v) throws InvalidUserActionException, RemoteException { 
-            modelo.apostar(numero, mesa, n, v, jugador);   
+            
+        modelo.apostar(numero, mesa, n, v, jugador);   
             vista.exitoApuesta();
     }
 

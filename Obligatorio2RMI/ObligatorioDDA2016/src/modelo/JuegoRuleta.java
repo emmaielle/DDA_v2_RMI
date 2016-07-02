@@ -10,6 +10,8 @@ import java.awt.Color;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -86,5 +88,20 @@ public class JuegoRuleta implements Serializable {
     }
     
     // </editor-fold>
+
+    public MesaRemoto crearYAgregarAMesa(Jugador j, String n) {
+        Mesa m = null;
+        try {
+            m = new Mesa(n);
+            //m.agregarJugador(m.getUnusedColour(), j);
+            agregarMesaRuleta(m, j, m.getUnusedColour());
+        } catch (RemoteException ex) {
+            Logger.getLogger(Casino.class.getName()).log(Level.SEVERE, null, ex);
+        
+        } catch (InvalidUserActionException ex) {
+            Logger.getLogger(JuegoRuleta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return m;
+    }
 
 }
