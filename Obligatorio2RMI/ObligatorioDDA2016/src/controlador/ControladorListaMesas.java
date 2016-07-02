@@ -85,8 +85,8 @@ public class ControladorListaMesas extends UnicastRemoteObject implements Observ
         }
     }
 
-    public void salirDeJuego() {
-        jugador.setEnJuego(false);
+    public void salirDeJuego() throws RemoteException {
+        modelo.setEnJuego(jugador, false);
     }
 
     public void verApuestas() {
