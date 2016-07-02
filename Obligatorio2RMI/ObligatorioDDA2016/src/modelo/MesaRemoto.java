@@ -22,11 +22,11 @@ public interface MesaRemoto extends Remote {
     public void setColoresDisp(ArrayList<Color> coloresDisp) throws RemoteException;
     
     public String getNombre() throws RemoteException;
-    public ArrayList<JugadorRuleta> getJugadoresEspera() throws RemoteException;
+    public ArrayList<TipoJugador> getJugadoresEspera() throws RemoteException;
     
-    public ArrayList<JugadorRuleta> getJugadoresMesa()throws RemoteException;
+    public ArrayList<TipoJugador> getJugadoresMesa()throws RemoteException;
     
-    public ArrayList<JugadorRuleta> getTodosJugadoresEnMesa()throws RemoteException;
+    public ArrayList<TipoJugador> getTodosJugadoresEnMesa()throws RemoteException;
 
     public ArrayList<Numero> getNumeros() throws RemoteException;
 
@@ -34,11 +34,11 @@ public interface MesaRemoto extends Remote {
 
     public void agregarJugador(Color c, Jugador j)throws RemoteException;
     
-    public void quitarJugador(JugadorRuleta j) throws RemoteException;
+    public void quitarJugador(TipoJugador j) throws RemoteException;
 
     public boolean validar()throws RemoteException;
 
-    public JugadorRuleta buscarJugador(Jugador j)throws RemoteException;
+    public TipoJugador buscarJugador(Jugador j)throws RemoteException;
 
     public Color getUnusedColour()throws RemoteException;
     
@@ -51,20 +51,20 @@ public interface MesaRemoto extends Remote {
     public void nuevaRonda()throws RemoteException;
     public Numero getNumeroGanador()throws RemoteException;
 
-    public void apostarUnNumero(String numero, Numero n, String v, JugadorRuleta jugador) throws InvalidUserActionException, RemoteException;
+    public void apostarUnNumero(String numero, Numero n, String v, TipoJugador jugador) throws InvalidUserActionException, RemoteException;
     
-    public void desapostar(Numero n, JugadorRuleta jugador) throws InvalidUserActionException, RemoteException;
+    public void desapostar(Numero n, TipoJugador jugador) throws InvalidUserActionException, RemoteException;
     
-    public void desapostar(String tipo, JugadorRuleta jugador) throws InvalidUserActionException, RemoteException;
+    public void desapostar(String tipo, TipoJugador jugador) throws InvalidUserActionException, RemoteException;
 
     public Numero finalizarApuestaPorTiempo() throws RemoteException;
-    public Numero finalizarApuesta(JugadorRuleta jr)throws RemoteException;
+    public Numero finalizarApuesta(TipoJugador jr)throws RemoteException;
     
     public void yaApostado(boolean si)throws RemoteException;
     public Numero apuestaTotal() throws RemoteException ;
        
     public void avisarCheckSaldo() throws RemoteException;
-    public boolean estaEnEspera(JugadorRuleta jugador)throws RemoteException;
+    public boolean estaEnEspera(TipoJugador jugador)throws RemoteException;
 
     public Numero buscarNumeroEnTablero(int randomOut)throws RemoteException;
 }

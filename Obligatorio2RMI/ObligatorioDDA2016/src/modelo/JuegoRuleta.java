@@ -75,7 +75,7 @@ public class JuegoRuleta implements Serializable {
         }
     }
     
-    public void quitarJugador(JugadorRuleta jugador, MesaRemoto mesa) throws RemoteException {
+    public void quitarJugador(TipoJugador jugador, MesaRemoto mesa) throws RemoteException {
         mesa.quitarJugador(jugador);
         if (mesa.getTodosJugadoresEnMesa().isEmpty()) cerrarMesa(mesa); 
     }

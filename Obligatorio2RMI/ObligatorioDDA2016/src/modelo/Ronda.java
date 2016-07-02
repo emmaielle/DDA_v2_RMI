@@ -7,7 +7,6 @@ package modelo;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Observer;
@@ -19,14 +18,14 @@ import java.util.logging.Logger;
  *
  * @author Euge
  */
-public class Ronda  implements Serializable, Observer{
+public class Ronda implements Serializable, Observer{
     private int oid;
     private int nroRonda;
     private ArrayList<Apuesta> apuestasGanadoras = new ArrayList<>();
     private Numero nroGanador = null;
     //private String colorGanador; ///
     private ArrayList<Apuesta> apuestas = new ArrayList<>();
-    private static int TIEMPO_LIMITE = 1; // minutos
+    private static int TIEMPO_LIMITE = 3; // minutos
     private transient Mesa mesa;
     private Date fechaYhoraFin;
     private Proceso elProceso;
@@ -36,18 +35,10 @@ public class Ronda  implements Serializable, Observer{
     public Ronda(int numRonda, Mesa m) {
         nroRonda = numRonda;
         mesa = m;
-        try {
-            elProceso = (Proceso) new Proceso();
-        } catch (RemoteException ex) {
-            Logger.getLogger(Ronda.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            elProceso.addObserver(this);
-            elProceso.reset();
-            elProceso.ejecutar();
-        } catch (RemoteException ex) {
-            Logger.getLogger(Ronda.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        elProceso = (Proceso) new Proceso();
+        elProceso.addObserver(this);
+        elProceso.reset();
+        elProceso.ejecutar();
     }
     public Ronda() throws RemoteException{
         
@@ -162,7 +153,7 @@ public class Ronda  implements Serializable, Observer{
         return yaApostada;
     }
     
-    public void apostar(String numero, Numero n, int v, JugadorRuleta jugador) throws RemoteException { //funciona en ambos sentidos si se clickea de nuevo
+    public void apostar(String numero, Numero n, int v, TipoJugador jugador) throws RemoteException { //funciona en ambos sentidos si se clickea de nuevo
         Apuesta yaApostada = buscarApuestaPorTipo(numero);
         if (yaApostada == null){ // si entra aca es porque ese numero no fue elegido antes
             Apuesta a = setApuestaByType(numero, v, jugador.getJugador(), n);
@@ -178,16 +169,16 @@ public class Ronda  implements Serializable, Observer{
         else desapostar(jugador, numero);
     }
     
-    public void desapostar(JugadorRuleta j, Numero n) throws RemoteException{
+    public void desapostar(TipoJugador j, Numero n) throws RemoteException{
         Apuesta yaApostada = buscarApuestaPorNumero(n);
-        if (yaApostada.getJugador().equals(j)) 
+        if (yaApostada.getJugador().equals(j.getJugador())) 
             quitarApuesta(yaApostada);
         if (!areThereBetsInThisRondaForThisPlayer(j)) j.setRondasSinApostar(j.getRondasSinApostarAnterior());
     }
     
-    public void desapostar(JugadorRuleta j, String tipo) throws RemoteException {
+    public void desapostar(TipoJugador j, String tipo) throws RemoteException {
         Apuesta yaApostada = buscarApuestaPorTipo(tipo);
-        if (yaApostada.getJugador().equals(j)) 
+        if (yaApostada.getJugador().equals(j.getJugador())) 
             quitarApuesta(yaApostada);
         if (!areThereBetsInThisRondaForThisPlayer(j)) j.setRondasSinApostar(j.getRondasSinApostarAnterior());
     }
@@ -260,9 +251,9 @@ public class Ronda  implements Serializable, Observer{
         return total;
     }
 
-    public boolean areThereBetsInThisRondaForThisPlayer(JugadorRuleta jugador) {
+    public boolean areThereBetsInThisRondaForThisPlayer(TipoJugador jugador) {
         for (Apuesta a : apuestas){
-            if (a.getJugador().equals(jugador)) return true;
+            if (a.getJugador().equals(jugador.getJugador())) return true;
         }
         return false;
     }
@@ -284,20 +275,12 @@ public class Ronda  implements Serializable, Observer{
     }
 
     public void stopProceso() {
-        try {
-            elProceso.parar();
-        } catch (RemoteException ex) {
-            Logger.getLogger(Ronda.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        elProceso.parar();
     }
 
 
     public void quitarObservador() {
-        try {
-            elProceso.deleteObserver(this);
-        } catch (RemoteException ex) {
-            Logger.getLogger(Ronda.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        elProceso.deleteObserver(this);
     }
 
     public Apuesta setApuestaByType(String numero, int monto, Jugador jugador, Numero n) {

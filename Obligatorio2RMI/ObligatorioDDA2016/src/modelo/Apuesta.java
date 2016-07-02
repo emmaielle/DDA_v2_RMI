@@ -16,9 +16,9 @@ import java.util.Date;
 public abstract class Apuesta implements Serializable {
     private int oid;
     private int monto;
-    private  Jugador jugador;
+    private Jugador jugador;
     private String numero;
-    private transient Ronda ronda;
+    private Ronda ronda;
     private final Date fechaHora;
     private int montoGanado;
 

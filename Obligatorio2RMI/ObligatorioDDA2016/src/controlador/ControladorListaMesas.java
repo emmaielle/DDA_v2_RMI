@@ -16,26 +16,25 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modelo.IModelo;
 import modelo.Jugador;
-import modelo.Mesa;
 import modelo.MesaRemoto;
 import modelo.Modelo;
 import observadorRemoto.ObservableRemoto;
 import observadorRemoto.ObservadorRemoto;
+import modelo.ModeloRemoto;
 
 /**
  *
  * @author Euge
  */
 public class ControladorListaMesas extends UnicastRemoteObject implements ObservadorRemoto {
-    private IModelo modelo;
+    private ModeloRemoto modelo;
     private Jugador jugador;
     private VistaListaMesas vista;
 
     public ControladorListaMesas(Jugador j, VistaListaMesas vista) throws RemoteException {
         try {
-            this.modelo=(IModelo)Naming.lookup("rmi://localhost/modelo");
+            this.modelo=(ModeloRemoto)Naming.lookup("rmi://localhost/modelo");
             this.jugador= j;
             this.vista = vista;
             modelo.agregar(this);
@@ -50,14 +49,10 @@ public class ControladorListaMesas extends UnicastRemoteObject implements Observ
         MesaRemoto m;
         try {
             m = modelo.nuevaMesa(nom, jugador);
-
-        vista.abrirMesa(m,jugador, false);
-        } catch (RemoteException ex) {
+            vista.abrirMesa(m,jugador, false);
+        } catch (RemoteException | InvalidUserActionException ex) {
             Logger.getLogger(ControladorListaMesas.class.getName()).log(Level.SEVERE, null, ex);
         }
-        catch (InvalidUserActionException ex) {
-           Logger.getLogger(ControladorListaMesas.class.getName()).log(Level.SEVERE, null, ex);
-       }
     }
     
      public void unirseAmesa(String nom) throws InvalidUserActionException{
@@ -88,7 +83,6 @@ public class ControladorListaMesas extends UnicastRemoteObject implements Observ
             Logger.getLogger(ControladorListaMesas.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
-
     }
 
     public void salirDeJuego() {

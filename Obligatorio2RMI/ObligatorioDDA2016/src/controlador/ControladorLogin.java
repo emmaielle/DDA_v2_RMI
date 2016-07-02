@@ -14,11 +14,11 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modelo.IModelo;
 import modelo.Jugador;
 import modelo.Modelo;
 import observadorRemoto.ObservableRemoto;
 import observadorRemoto.ObservadorRemoto;
+import modelo.ModeloRemoto;
 
 /**
  *
@@ -26,13 +26,13 @@ import observadorRemoto.ObservadorRemoto;
  */
 public class ControladorLogin extends UnicastRemoteObject implements ObservadorRemoto{
     
-    private IModelo modelo;
+    private ModeloRemoto modelo;
     private VistaLogin vista;
     
     public ControladorLogin(VistaLogin vista) throws RemoteException{
         try {
             this.vista = vista;
-            this.modelo=(IModelo)Naming.lookup("rmi://localhost/modelo");
+            this.modelo=(ModeloRemoto)Naming.lookup("rmi://localhost/modelo");
             modelo.agregar(this);
             vista.habilitar(modelo.isHabilitado());
         } catch (NotBoundException | MalformedURLException ex) {

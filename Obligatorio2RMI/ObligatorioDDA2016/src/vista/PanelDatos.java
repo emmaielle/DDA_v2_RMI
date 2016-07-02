@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import modelo.JugadorRuleta;
+import modelo.TipoJugador;
 
 /**
  *
@@ -255,9 +256,9 @@ public class PanelDatos extends javax.swing.JPanel {
     private javax.swing.JToggleButton veinticincoTreintayseis;
     // End of variables declaration//GEN-END:variables
     
-    public void mostrarJugadores(ArrayList<JugadorRuleta> j) {
+    public void mostrarJugadores(ArrayList<TipoJugador> j) {
        ArrayList<String> listado = new ArrayList<>();
-       for (JugadorRuleta ju : j){
+       for (TipoJugador ju : j){
            listado.add(ju.getJugador().getNombreCompleto());
        }
        listaJugadores.setListData(listado.toArray());
@@ -317,13 +318,12 @@ public class PanelDatos extends javax.swing.JPanel {
          try{
             if (apostar){
                 String sMonto = obtenerApuesta();
-                controlador.apostar(tipo, null, sMonto); 
+                controlador.apostar(tipo, null, sMonto);
             }
-            else try {
+            else 
                 controlador.desapostar(tipo); // aca arreglar 
-            } catch (RemoteException ex) {
-                Logger.getLogger(PanelDatos.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(PanelDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
         catch (InvalidUserActionException ex){
             if (!ex.getMessage().equals(""))

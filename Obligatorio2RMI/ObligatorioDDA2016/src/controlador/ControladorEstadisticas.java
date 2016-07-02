@@ -13,25 +13,25 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modelo.IModelo;
 import modelo.Jugador;
 import modelo.Modelo;
 import observadorRemoto.ObservableRemoto;
 import observadorRemoto.ObservadorRemoto;
+import modelo.ModeloRemoto;
 
 /**
  *
  * @author Euge
  */
 public class ControladorEstadisticas extends UnicastRemoteObject implements ObservadorRemoto{
-    public IModelo modelo;
+    public ModeloRemoto modelo;
     public VistaEstadisticas vista;
     public Jugador jugador;
 
     public ControladorEstadisticas(VistaEstadisticas vista, Jugador jugador) throws RemoteException{
         try {
             this.vista = vista;
-            this.modelo = (IModelo)Naming.lookup("rmi://localhost/modelo");
+            this.modelo = (ModeloRemoto)Naming.lookup("rmi://localhost/modelo");
             this.jugador = jugador;
             modelo.agregar(this);
         } catch (NotBoundException ex) {

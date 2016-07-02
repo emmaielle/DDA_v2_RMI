@@ -6,10 +6,7 @@
 package modelo;
 
 import exceptions.InvalidUserActionException;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import mapeadores.MapeadorJugador;
 import mapeadores.MapeadorRonda;
 import persistencia.BaseDatos;
@@ -136,4 +133,5 @@ public class SistemaJugador {
             }
         }
     }
+
 }

@@ -15,11 +15,11 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.Apuesta;
-import modelo.IModelo;
 import modelo.Jugador;
 import modelo.Modelo;
 import observadorRemoto.ObservableRemoto;
 import observadorRemoto.ObservadorRemoto;
+import modelo.ModeloRemoto;
 
 /**
  *
@@ -27,14 +27,14 @@ import observadorRemoto.ObservadorRemoto;
  */
 public class ControladorApuestas extends UnicastRemoteObject implements ObservadorRemoto{
     
-    private IModelo modelo;
+    private ModeloRemoto modelo;
     private VistaApuestas vista;
     private Jugador j;
 
     public ControladorApuestas(VistaApuestas vista, Jugador j) throws RemoteException {
         try {
             this.vista = vista;
-            this.modelo=(IModelo)Naming.lookup("rmi://localhost/modelo");
+            this.modelo=(ModeloRemoto)Naming.lookup("rmi://localhost/modelo");
             this.j = j;
             modelo.agregar(this);
         } catch (NotBoundException | MalformedURLException ex) {

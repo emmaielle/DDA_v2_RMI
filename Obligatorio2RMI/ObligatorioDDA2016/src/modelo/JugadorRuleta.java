@@ -13,7 +13,7 @@ import java.util.Objects;
  *
  * @author Euge
  */
-public class JugadorRuleta implements Serializable{
+public class JugadorRuleta implements Serializable, TipoJugador{
     private Color color;
     private transient Mesa mesa;
     private Jugador jugador;
@@ -84,18 +84,22 @@ public class JugadorRuleta implements Serializable{
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Metodos">
+    @Override
     public void agregarApuesta(Apuesta a){
         if(a!=null) jugador.getApuestas().add(a);
     }
 
+    @Override
     public void quitarApuesta(Apuesta a){
         if (jugador.getApuestas().contains(a)) jugador.getApuestas().remove(a);
     }
 
+    @Override
     public boolean expulsado() {
         return jugador.getSaldo() == 0;
     }
     
+    @Override
     public boolean sinApostarTresVeces(){
         return this.rondasSinApostar > 2;
     }

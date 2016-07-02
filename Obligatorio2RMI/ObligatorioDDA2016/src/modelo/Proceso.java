@@ -6,46 +6,43 @@
 package modelo;
 
 import java.io.Serializable;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.Observer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Moi
  */
-public class Proceso implements Runnable, Serializable{
 
-    public static final int EVENTO_ADD_SECONDS = 1;
+public class Proceso implements Runnable, Serializable {
+
+   public static final int EVENTO_ADD_SECONDS = 1;
     public static final int EVENTO_TIME_OUT = 2;
     
-    private Thread hilo;
+    private transient Thread hilo;
     private boolean ejecutar = false;
     private int segundos;
-    private MiObservable observable = new MiObservable();
+    private transient MiObservable observable = new MiObservable();
     
-    public Proceso() throws RemoteException{
+    public Proceso(){
         
     }
 
-    public int getSegundos() throws RemoteException {
+    public int getSegundos() {
         return segundos;
     }    
     
-    public synchronized void addObserver(Observer o) throws RemoteException {
+    public synchronized void addObserver(Observer o) {
         observable.addObserver(o);
     }
 
-    public synchronized void deleteObserver(Observer o) throws RemoteException {
+    public synchronized void deleteObserver(Observer o) {
         observable.deleteObserver(o);
     }
     private void avisar(Object evento){
         observable.avisar(evento);
     }
 
-    public void ejecutar() throws RemoteException{
+    public void ejecutar(){
         if(!ejecutar ){
             ejecutar = true;
             hilo = new Thread(this);
@@ -53,13 +50,13 @@ public class Proceso implements Runnable, Serializable{
         }
     }
 
-    public void parar() throws RemoteException{
+    public void parar(){
         ejecutar=false;
         //para cortar el sleep
         hilo.interrupt();
     }
     
-    public void reset() throws RemoteException{
+    public void reset(){
         segundos = 0;
         avisar(Proceso.EVENTO_ADD_SECONDS);
     }
@@ -67,7 +64,7 @@ public class Proceso implements Runnable, Serializable{
     
     
     @Override
-    public void run()  {
+    public void run() {
         for (;segundos< Ronda.getTIEMPO_LIMITE()*60&&ejecutar;segundos++){
             avisar(Proceso.EVENTO_ADD_SECONDS);
             try {
@@ -76,12 +73,8 @@ public class Proceso implements Runnable, Serializable{
 
             }
         }
-        try { 
-            ejecutar=false;    
-            reset();
-        } catch (RemoteException ex) {
-            Logger.getLogger(Proceso.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ejecutar=false;    
+        reset();
         avisar(Proceso.EVENTO_TIME_OUT);
     }
            

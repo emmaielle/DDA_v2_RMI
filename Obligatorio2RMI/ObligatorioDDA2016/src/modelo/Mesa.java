@@ -7,12 +7,10 @@ package modelo;
 
 import exceptions.InvalidUserActionException;
 import java.awt.Color;
-import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Objects;
 import mapeadores.MapeadorJugador;
 import mapeadores.MapeadorRonda;
 import persistencia.BaseDatos;
@@ -23,8 +21,8 @@ import persistencia.BaseDatos;
  */
 public class Mesa extends UnicastRemoteObject implements MesaRemoto {
     private String nombre;
-    private ArrayList<JugadorRuleta> jugadoresEspera = new ArrayList<>();
-    private ArrayList<JugadorRuleta> jugadoresMesa = new ArrayList();
+    private ArrayList<TipoJugador> jugadoresEspera = new ArrayList<>();
+    private ArrayList<TipoJugador> jugadoresMesa = new ArrayList();
     private ArrayList<Numero> numeros = new ArrayList();
     private ArrayList<Ronda> rondas = new ArrayList();
     private ArrayList<Color> coloresDisp;
@@ -57,20 +55,20 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         return nombre;
     }
 
-    public ArrayList<JugadorRuleta> getJugadoresEspera() {
+    public ArrayList<TipoJugador> getJugadoresEspera() {
         return jugadoresEspera;
     }
     
-    public ArrayList<JugadorRuleta> getJugadoresMesa() {
+    public ArrayList<TipoJugador> getJugadoresMesa() {
         return jugadoresMesa;
     }
     
-    public ArrayList<JugadorRuleta> getTodosJugadoresEnMesa(){
-        ArrayList<JugadorRuleta> todos = new ArrayList<>();
-        for (JugadorRuleta k : jugadoresMesa){
+    public ArrayList<TipoJugador> getTodosJugadoresEnMesa(){
+        ArrayList<TipoJugador> todos = new ArrayList<>();
+        for (TipoJugador k : jugadoresMesa){
             todos.add(k);
         }
-        for (JugadorRuleta j : jugadoresEspera){
+        for (TipoJugador j : jugadoresEspera){
             todos.add(j);
         }
         return todos;
@@ -92,8 +90,9 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
 //        try {
             // crea y agrega el jugadorRuleta en la mesa actual y lo guarda en su lista de JR
             // devuelve boolean que indica si el jugador esta en espera o no
-            JugadorRuleta jr = new JugadorRuleta(c, this, j);
+            TipoJugador jr = new JugadorRuleta(c, this, j);
             jr.setMesa(this); // mesa en jugador
+            j.setJugadorTipo(jr);
             if(jugadoresMesa.isEmpty()){
                 jugadoresMesa.add(jr);
             }
@@ -107,7 +106,7 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
 //        }
     }
     
-    public void quitarJugador(JugadorRuleta j) throws RemoteException{
+    public void quitarJugador(TipoJugador j) throws RemoteException{
         jugadoresMesa.remove(j);
         jugadoresEspera.remove(j);
         j.getJugador().setEnMesa(false);
@@ -127,17 +126,19 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         return !nombre.isEmpty() && !nombre.contains(",");
     }
 
-    public JugadorRuleta buscarJugador(Jugador j){
-        for(JugadorRuleta jr:jugadoresMesa){
-            if(jr.getJugador().equals(j)) return jr;     
+    // cambie que chequee nombrecompleto por solo nombre de usuario.
+    @Override
+    public TipoJugador buscarJugador(Jugador j){
+        for(TipoJugador jr:jugadoresMesa){
+            if(jr.getJugador().getNombre().equals(j.getNombre())) return jr;     
         }
-        for(JugadorRuleta jr: jugadoresEspera){
-            if(jr.getJugador().equals(j)) return jr;
+        for(TipoJugador jr: jugadoresEspera){
+            if(jr.getJugador().getNombre().equals(j.getNombre())) return jr;
         }
         return null;
     }
 
-    public void initMesa(){
+    public void initMesa() throws RemoteException{
         if(numeros!=null)numeros.clear();
         numeros.add(new Numero(0, Color.green));
         numeros.add(new Numero(1, Color.red));
@@ -187,10 +188,11 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         cantFinalizados=0;
     }
 
+    @Override
     public Color getUnusedColour() {
         Color sirve = Color.YELLOW;
         ArrayList<Color> temp = new ArrayList<>();
-        for (JugadorRuleta jr : this.getTodosJugadoresEnMesa()){
+        for (TipoJugador jr : this.getTodosJugadoresEnMesa()){
             temp.add(jr.getColor());
         }
         for (Color c : this.getColoresDisp()){
@@ -202,6 +204,7 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         return sirve;
     }
     
+    @Override
     public int getUltimaRonda(){
         int ultRonda = 0;
         for (Ronda r : rondas){
@@ -210,6 +213,7 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         return ultRonda;
     }
     
+    @Override
     public Ronda buscarRonda(int id){
         for (Ronda r: rondas){
             if (r.getNroRonda() == id) return r;
@@ -217,6 +221,7 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         return null;
     }
 
+    @Override
     public Numero sortearNumeroGanador() throws RemoteException {
         Ronda ultimaRonda = buscarRonda(getUltimaRonda());
         Numero nro = ultimaRonda.sortearNroGanador(); 
@@ -227,12 +232,13 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         return nro;
     }
 
-    public void nuevaRonda() {
+    @Override
+    public void nuevaRonda() throws RemoteException {
         // esto asegura que no intente pasar en espera solo porque termino la ronda
         // y no considere la max cant de jugadores por ronda
         while (jugadoresMesa.size() < 4 && !jugadoresEspera.isEmpty()){
             if (!jugadoresEspera.isEmpty()){
-                JugadorRuleta temp = jugadoresEspera.get(0);
+                TipoJugador temp = jugadoresEspera.get(0);
                 jugadoresMesa.add(temp);
                 jugadoresEspera.remove(temp);
             }
@@ -242,12 +248,14 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         Modelo.getInstancia().notificar(Modelo.EVENTO_NUEVO_JUGADOR_MESA_RULETA);
     }
     
+    @Override
     public Numero getNumeroGanador() {
         if (this.getUltimaRonda() == 1) return new Numero(-1);
         return (this.buscarRonda(this.getUltimaRonda() - 1)).getNroGanador();
     }
 
-    public void apostarUnNumero(String numero, Numero n, String v, JugadorRuleta jugador) throws InvalidUserActionException, RemoteException {
+    @Override
+    public void apostarUnNumero(String numero, Numero n, String v, TipoJugador jugador) throws InvalidUserActionException, RemoteException {
         if(jugadoresEspera.contains(jugador)) throw new InvalidUserActionException("Debe esperar a que finalice la ronda actual");
         if(jugador.isApostado()) throw new InvalidUserActionException("Ya ha finalizado su apuesta");
         
@@ -260,50 +268,58 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
             if(jugador.getJugador().getSaldo() < montoInt) throw new InvalidUserActionException("No tiene saldo suficiente para realizar esta apuesta");
             if(montoInt == 0) throw new InvalidUserActionException("Ingrese un monto mayor que 0");
             if(montoInt != 0){
-                for(JugadorRuleta jr:jugadoresMesa){
-                    if(jugador==jr)
-                        (buscarRonda(getUltimaRonda())).apostar(numero, n, montoInt, jugador);
+                for(TipoJugador jr:jugadoresMesa){
+                    if(jugador.getJugador().getNombreCompleto().equals(jr.getJugador().getNombreCompleto()))
+                        (buscarRonda(getUltimaRonda())).apostar(numero, n, montoInt, jr);
                 }
                 Modelo.getInstancia().notificar(Modelo.EVENTO_ACTUALIZA_SALDOS);
             }
         }
     }
     
-    public void desapostar(Numero n, JugadorRuleta jugador) throws InvalidUserActionException, RemoteException {
+    @Override
+    public void desapostar(Numero n, TipoJugador jugador) throws InvalidUserActionException, RemoteException {
         if(jugador.isApostado()) throw new InvalidUserActionException("Ya ha finalizado su apuesta");
-        for(JugadorRuleta jr:jugadoresMesa){
+        for(TipoJugador jr:jugadoresMesa){
             if(jugador==jr)
                 if (n!=null && n.getApuesta() != null) (buscarRonda(getUltimaRonda())).desapostar(jugador, n);
         }
         Modelo.getInstancia().notificar(Modelo.EVENTO_ACTUALIZA_SALDOS);
     }
     
-    public void desapostar(String tipo, JugadorRuleta jugador) throws InvalidUserActionException, RemoteException{
+    @Override
+    public void desapostar(String tipo, TipoJugador jugador) throws InvalidUserActionException, RemoteException{
         if(jugador.isApostado()) throw new InvalidUserActionException("Ya ha finalizado su apuesta");
-        for(JugadorRuleta jr:jugadoresMesa){
-            if(jugador==jr)
+        for(TipoJugador jr:jugadoresMesa){
+            if(jugador.getJugador().getNombre().equals(jr.getJugador().getNombre())){
                 (buscarRonda(getUltimaRonda())).desapostar(jugador, tipo);
+            }
         }
         Modelo.getInstancia().notificar(Modelo.EVENTO_ACTUALIZA_SALDOS);
     }
 
+    @Override
     public Numero finalizarApuestaPorTiempo() throws RemoteException{
         cantFinalizados = jugadoresMesa.size();
         return apuestaTotal();
     }
     
-    public Numero finalizarApuesta(JugadorRuleta jr)throws RemoteException{
+    @Override
+    public Numero finalizarApuesta(TipoJugador jr)throws RemoteException{
         cantFinalizados++;
         Numero nroSorteado = apuestaTotal();
         Modelo.getInstancia().notificar(Modelo.EVENTO_SIN_JUGAR);
         return nroSorteado;
     } 
     
+    @Override
     public void yaApostado(boolean si){
-        for(JugadorRuleta jr:jugadoresMesa){
+        for(TipoJugador jr:jugadoresMesa){
             jr.setApostado(si);
         }
     }
+    
+    @Override
     public Numero apuestaTotal() throws RemoteException {
         // a cada jugador en juego le suma una ronda sin apostar. Los que si habian apostado quedan 
         // en 0 y los que tenian X rondas sin apostar le suman 1.
@@ -319,9 +335,10 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
     
     private void sumarRondaSinApostar() {
         Ronda ultRonda = buscarRonda(getUltimaRonda());
-        for (JugadorRuleta jr : jugadoresMesa){
+        for (TipoJugador jr : jugadoresMesa){
             boolean haApostado = false;
             for (Apuesta a: jr.getJugador().getApuestas()){
+                //Apuesta aGot = buscarRonda()
                 if (a.getRonda().equals(ultRonda)) haApostado = true;
             }
             if (!haApostado) jr.setRondasSinApostar(jr.getRondasSinApostar() + 1);
@@ -330,11 +347,13 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         }
     }
     
+    @Override
     public void avisarCheckSaldo()  {
         Modelo.getInstancia().notificar(Modelo.EVENTO_CHECK_SALDOS);
     }
     
-    public boolean estaEnEspera(JugadorRuleta jugador) {
+    @Override
+    public boolean estaEnEspera(TipoJugador jugador) {
         return jugadoresEspera.contains(jugador);
     }
 
@@ -352,19 +371,26 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
     }
      // </editor-fold>
 
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 83 * hash + Objects.hashCode(this.nombre);
+        return hash;
+    }
+
 
 
     private void persistencia() {
         BaseDatos bd = BaseDatos.getInstancia();
         bd.conectar();
-        for(JugadorRuleta jr:jugadoresMesa){
+        for(TipoJugador jr:jugadoresMesa){
             persistoJugador(jr, bd);
             persistoRonda(jr,bd);   
         }     
         bd.desconectar();
     }
 
-    private void persistoJugador(JugadorRuleta jr, BaseDatos bd) {
+    private void persistoJugador(TipoJugador jr, BaseDatos bd) {
         MapeadorJugador map = new MapeadorJugador();
         ArrayList jugadores = bd.consultar(map, " and u.oid = "+jr.getJugador().getOid());
         Jugador j = (Jugador) jugadores.get(0);
@@ -373,12 +399,13 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         bd.guardar(map);
     }
 
-    private void persistoRonda(JugadorRuleta jr, BaseDatos bd) {
+    private void persistoRonda(TipoJugador jr, BaseDatos bd) {
         MapeadorRonda mapR = new MapeadorRonda();
         mapR.setR(this.buscarRonda(this.getUltimaRonda()));
         bd.guardar(mapR);
     }
 
+    @Override
     public Numero buscarNumeroEnTablero(int randomOut) {
         ArrayList<Numero> nums = this.getNumeros();
         for (Numero n: nums){

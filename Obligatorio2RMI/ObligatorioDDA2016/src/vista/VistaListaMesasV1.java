@@ -14,7 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.Jugador;
-import modelo.Mesa;
 import modelo.MesaRemoto;
 
 /**

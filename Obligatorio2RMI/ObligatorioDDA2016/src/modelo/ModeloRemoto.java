@@ -15,7 +15,7 @@ import observadorRemoto.ObservableRemoto;
  *
  * @author Euge
  */
-public interface IModelo extends ObservableRemoto{
+public interface ModeloRemoto extends ObservableRemoto{
 //    public void obtenerTodos();
     public boolean isHabilitado() throws RemoteException;
     public Jugador login(String nom, String psw) throws InvalidUserActionException, RemoteException;
@@ -28,13 +28,12 @@ public interface IModelo extends ObservableRemoto{
     public void agregarMesaRuleta(MesaRemoto m, Jugador j, Color c) throws InvalidUserActionException, RemoteException;
     public MesaRemoto buscarMesaRuleta(String nom) throws RemoteException;
     public void unirJugadorAMesaRuleta(Jugador j, MesaRemoto m, Color c) throws InvalidUserActionException, RemoteException;
-    public ArrayList<JugadorRuleta> getJugadoresPorMesa(MesaRemoto m) throws RemoteException;
+    public ArrayList<TipoJugador> getJugadoresPorMesa(MesaRemoto m) throws RemoteException;
     public Color asignarColorRuleta(MesaRemoto m) throws RemoteException;
     public Numero ultNumeroSorteado(MesaRemoto m) throws RemoteException;
-    public void apostar(String numero, MesaRemoto mesa, Numero n, String v, JugadorRuleta jugador) throws InvalidUserActionException, RemoteException;
-    public Numero finalizarApuesta(MesaRemoto mesa, JugadorRuleta jr) throws RemoteException;
-    public void salirDeMesaRuleta(JugadorRuleta jugador, MesaRemoto mesa) throws RemoteException;
-    public boolean estaEnEspera(JugadorRuleta jugador, MesaRemoto mesa) throws RemoteException;
-
+    public void apostar(String numero, MesaRemoto mesa, Numero n, String v, TipoJugador jugador) throws InvalidUserActionException, RemoteException;
+    public Numero finalizarApuesta(MesaRemoto mesa, TipoJugador jr) throws RemoteException;
+    public void salirDeMesaRuleta(TipoJugador jugador, MesaRemoto mesa) throws RemoteException;
+    public boolean estaEnEspera(TipoJugador jugador, MesaRemoto mesa) throws RemoteException;
     public MesaRemoto nuevaMesa(String n, Jugador j) throws RemoteException, InvalidUserActionException;
 }

@@ -7,7 +7,6 @@ package controlador;
 
 import java.util.ArrayList;
 import modelo.Jugador;
-import modelo.Mesa;
 import modelo.MesaRemoto;
 
 /**

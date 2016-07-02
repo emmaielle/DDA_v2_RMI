@@ -18,10 +18,9 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import modelo.Jugador;
-import modelo.JugadorRuleta;
-import modelo.Mesa;
 import modelo.MesaRemoto;
 import modelo.Numero;
+import modelo.TipoJugador;
 
 /**
  *
@@ -39,7 +38,7 @@ public class VistaMesaV1 extends javax.swing.JDialog implements VistaMesa, Actio
         try {
             initComponents();
             setTitle("Mesa: " + m.getNombre()+ " - Jugador: " + j.getNombreCompleto());
-            JugadorRuleta jr= m.buscarJugador(j); // acaaa
+            TipoJugador jr= m.buscarJugador(j); // acaaa
             controlador = new ControladorMesa(this,m,jr);
             top = new PanelDatos(controlador);
             split.setTopComponent(top);
@@ -100,6 +99,8 @@ public class VistaMesaV1 extends javax.swing.JDialog implements VistaMesa, Actio
         try{
             String sMonto = top.obtenerApuesta();
             controlador.apostar("Pleno " + n.getValor(), n, sMonto); // change heree
+        } catch (RemoteException ex) {
+            Logger.getLogger(VistaMesaV1.class.getName()).log(Level.SEVERE, null, ex);
         }
         catch (InvalidUserActionException ex){
             JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -107,7 +108,7 @@ public class VistaMesaV1 extends javax.swing.JDialog implements VistaMesa, Actio
     }
 
     @Override
-    public void mostrarJugadores(ArrayList<JugadorRuleta> j) {
+    public void mostrarJugadores(ArrayList<TipoJugador> j) {
         top.mostrarJugadores(j);
     }
 
@@ -163,8 +164,6 @@ public class VistaMesaV1 extends javax.swing.JDialog implements VistaMesa, Actio
     public void colorJugador(Color color) {
         top.colorJugador(color);
     }
-   
-
 
     @Override
     public void mostrarSegundos(int s) {

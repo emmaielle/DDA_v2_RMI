@@ -16,14 +16,13 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modelo.IModelo;
-import modelo.JugadorRuleta;
-import modelo.Mesa;
 import modelo.MesaRemoto;
 import modelo.Modelo;
 import modelo.Numero;
 import observadorRemoto.ObservableRemoto;
 import observadorRemoto.ObservadorRemoto;
+import modelo.ModeloRemoto;
+import modelo.TipoJugador;
 
 /**
  *
@@ -31,15 +30,15 @@ import observadorRemoto.ObservadorRemoto;
  */
 public class ControladorMesa extends UnicastRemoteObject implements ObservadorRemoto {
 
-    private IModelo modelo = Modelo.getInstancia();
+    private ModeloRemoto modelo = Modelo.getInstancia();
     private VistaMesa vista;
-    private JugadorRuleta jugador;
+    private TipoJugador jugador;
     private MesaRemoto mesa;
     
-    public ControladorMesa(VistaMesa vista, MesaRemoto m, JugadorRuleta jr)throws RemoteException{
+    public ControladorMesa(VistaMesa vista, MesaRemoto m, TipoJugador jr)throws RemoteException{
         try {
             this.vista = vista;
-            this.modelo=(IModelo)Naming.lookup("rmi://localhost/modelo");
+            this.modelo=(ModeloRemoto)Naming.lookup("rmi://localhost/modelo");
             this.jugador = jr;
             this.mesa= m;
             vista.mostrar(mesa.getNumeros());
@@ -49,6 +48,12 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
         }
     }
     
+    /**
+     *
+     * @param origen
+     * @param param
+     * @throws RemoteException
+     */
     @Override
     public void actualizar(ObservableRemoto origen, Serializable param) throws RemoteException {
         if (param.equals(Modelo.EVENTO_ADD_SECONDS)){
@@ -78,21 +83,18 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
             if (jugador.expulsado()) vista.cerrarVentana("Se le terminó el saldo");
         }
         else if(param.equals(Modelo.EVENTO_ACTUALIZA_SALDOS))
+            jugador = mesa.buscarJugador(jugador.getJugador());
             vista.mostrarSaldo(jugador.getJugador().getSaldo());
     }
     
-    public void apostar(String numero, Numero n, String v) throws InvalidUserActionException { 
-        try {
+    public void apostar(String numero, Numero n, String v) throws InvalidUserActionException, RemoteException { 
             modelo.apostar(numero, mesa, n, v, jugador);   
             vista.exitoApuesta();
-        } catch (RemoteException ex) {
-            Logger.getLogger(ControladorMesa.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     public void cargarJugadoresActivos() {
         try {
-            ArrayList<JugadorRuleta> j = modelo.getJugadoresPorMesa(mesa);
+            ArrayList<TipoJugador> j = modelo.getJugadoresPorMesa(mesa);
             vista.mostrarJugadores(j);
         } catch (RemoteException ex) {
             Logger.getLogger(ControladorMesa.class.getName()).log(Level.SEVERE, null, ex);
