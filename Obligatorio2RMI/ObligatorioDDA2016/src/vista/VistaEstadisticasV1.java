@@ -95,7 +95,11 @@ public class VistaEstadisticasV1 extends javax.swing.JDialog implements VistaEst
 
     @Override
     public void habilitarBotonStats(boolean habilitar) {
-        controlador.habilitarStats(habilitar);
+        try {
+            controlador.habilitarStats(habilitar);
+        } catch (RemoteException ex) {
+            Logger.getLogger(VistaEstadisticasV1.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 //    @Override

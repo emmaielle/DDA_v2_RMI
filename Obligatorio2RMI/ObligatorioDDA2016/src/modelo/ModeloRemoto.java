@@ -37,4 +37,5 @@ public interface ModeloRemoto extends ObservableRemoto{
     public boolean estaEnEspera(TipoJugador jugador, MesaRemoto mesa) throws RemoteException;
     public MesaRemoto nuevaMesa(String n, Jugador j) throws RemoteException, InvalidUserActionException;
     public Jugador getJugador(int oid) throws RemoteException;
+    public void setStatsOn(Jugador jugador, boolean habilitar) throws RemoteException;
 }
