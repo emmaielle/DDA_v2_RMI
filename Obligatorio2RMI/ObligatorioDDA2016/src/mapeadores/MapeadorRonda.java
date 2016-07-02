@@ -52,23 +52,34 @@ public class MapeadorRonda implements Persistente{
     @Override
     public ArrayList<String> getSqlInsert() {
         ArrayList<String> sqls = new ArrayList();
-        sqls.add(
-                "INSERT INTO ronda (oid,numRonda,fechaYhoraFin,nomMesa,nroSorteado) VALUES " +
-                  "(" + getOid() + "," + r.getNroRonda() + ",'" + new Timestamp(r.getFechaYhoraFin().getTime()) + "','" 
-                        + r.getMesa().getNombre()+
-                  "'," + r.getNroGanador().getValor() + ")");
-        agregarApuestas(sqls);
+        try {
+            sqls.add(
+                    "INSERT INTO ronda (oid,numRonda,fechaYhoraFin,nomMesa,nroSorteado) VALUES " +
+                            "(" + getOid() + "," + r.getNroRonda() + ",'" + new Timestamp(r.getFechaYhoraFin().getTime()) + "','"
+                            + r.getMesa().getNombre()+
+                            "'," + r.getNroGanador().getValor() + ")");
+            agregarApuestas(sqls);
+        } catch (RemoteException ex) {
+            Logger.getLogger(MapeadorRonda.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return sqls;
+
     }
 
     @Override
     public ArrayList<String> getSqlUpdate() {
         ArrayList<String> sqls = new ArrayList();
-        sqls.add(
-             "UPDATE ronda set fechaYhoraFin='" + new Timestamp(r.getFechaYhoraFin().getTime()) + "'"  +
-               ", nomMesa='" + r.getMesa().getNombre() +"', nroSorteado=" + r.getNroGanador().getValor() +
-               " WHERE oid = " + r.getOid());
+
+        try {
+            sqls.add(
+                    "UPDATE ronda set fechaYhoraFin='" + new Timestamp(r.getFechaYhoraFin().getTime()) + "'"  +
+                            ", nomMesa='" + r.getMesa().getNombre() +"', nroSorteado=" + r.getNroGanador().getValor() +
+                            " WHERE oid = " + r.getOid());
+        } catch (RemoteException ex) {
+            Logger.getLogger(MapeadorRonda.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return sqls;
+
     }
 
     @Override
