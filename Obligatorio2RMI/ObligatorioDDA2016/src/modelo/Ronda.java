@@ -187,6 +187,8 @@ public class Ronda implements Serializable, Observer{
         a.getJugador().modificarSaldo(true,a.getMonto());
         if (a instanceof ApuestaPleno){
             ((ApuestaPleno)a).getNumeroTablero().setApuesta(null);
+            mesa.buscarNumeroEnTablero(((ApuestaPleno)a).getNumeroTablero().getValor()).setApuesta(null);
+
         }
         a.getJugador().quitarApuesta(a);
         a.setJugador(null);
@@ -198,6 +200,7 @@ public class Ronda implements Serializable, Observer{
     public void agregarApuesta(Apuesta a) {
         if (a instanceof ApuestaPleno){
             ((ApuestaPleno)a).getNumeroTablero().setApuesta(a);
+            mesa.buscarNumeroEnTablero(((ApuestaPleno)a).getNumeroTablero().getValor()).setApuesta(a);
         }
         a.getJugador().agregarApuesta(a);
         apuestas.add(a);

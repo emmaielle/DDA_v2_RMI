@@ -99,6 +99,8 @@ public class VistaMesaV1 extends javax.swing.JDialog implements VistaMesa, Actio
         try{
             String sMonto = top.obtenerApuesta();
             controlador.apostar("Pleno " + n.getValor(), n, sMonto); // change heree
+            controlador.mostrarNum();
+            
         } catch (RemoteException ex) {
             Logger.getLogger(VistaMesaV1.class.getName()).log(Level.SEVERE, null, ex);
         }
