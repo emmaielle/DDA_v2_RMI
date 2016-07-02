@@ -51,7 +51,12 @@ public class ControladorApuestas extends UnicastRemoteObject implements Observad
     }
 
     public void salirDeApuestas() {
-        j.setApuestasOn(false);
+        try {
+            j.setApuestasOn(false);
+            modelo.quitar(this);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorApuestas.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

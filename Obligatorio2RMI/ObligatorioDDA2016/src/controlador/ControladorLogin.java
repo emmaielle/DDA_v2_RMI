@@ -55,10 +55,14 @@ public class ControladorLogin extends UnicastRemoteObject implements ObservadorR
             Logger.getLogger(ControladorLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-//
-//    public void eliminarObservador() {
-//        modelo.deleteObserver(this);
-//    }
+
+    public void eliminarObservador() {
+        try {
+            modelo.quitar(this);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorLogin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @Override
     public void actualizar(ObservableRemoto origen, Serializable param) throws RemoteException {
