@@ -89,10 +89,9 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
             vista.mostrarSaldo(jugador.getJugador().getSaldo());
     }
     
-    public void apostar(String numero, Numero n, String v) throws InvalidUserActionException, RemoteException { 
-            
+    public void apostar(String numero, Numero n, String v) throws InvalidUserActionException, RemoteException {             
         modelo.apostar(numero, mesa, n, v, jugador);   
-            vista.exitoApuesta();
+        vista.exitoApuesta();
     }
 
     public void cargarJugadoresActivos() {
