@@ -134,4 +134,11 @@ public class SistemaJugador {
         }
     }
 
+    Jugador getJugador(int oid) {
+        for (Jugador j : jugadores){
+            if (j.getOid() == oid) return j;
+        }
+        return null;
+    }
+
 }

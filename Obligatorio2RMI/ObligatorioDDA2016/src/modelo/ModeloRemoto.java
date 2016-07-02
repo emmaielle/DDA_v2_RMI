@@ -36,4 +36,5 @@ public interface ModeloRemoto extends ObservableRemoto{
     public void salirDeMesaRuleta(TipoJugador jugador, MesaRemoto mesa) throws RemoteException;
     public boolean estaEnEspera(TipoJugador jugador, MesaRemoto mesa) throws RemoteException;
     public MesaRemoto nuevaMesa(String n, Jugador j) throws RemoteException, InvalidUserActionException;
+    public Jugador getJugador(int oid) throws RemoteException;
 }

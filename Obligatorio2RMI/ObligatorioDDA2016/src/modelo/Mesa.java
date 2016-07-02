@@ -33,6 +33,10 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         this.nombre = nombre;
         initMesa();
     }
+    
+    public Mesa() throws RemoteException{
+        
+    }
  // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters y setters">   
@@ -85,6 +89,7 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
     
     // <editor-fold defaultstate="collapsed" desc="Metodos">  
     
+    @Override
     public void agregarJugador(Color c, Jugador j){
         // aca perdi el try catch :(
 //        try {
