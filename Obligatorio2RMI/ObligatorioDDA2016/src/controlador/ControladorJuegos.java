@@ -80,12 +80,16 @@ public class ControladorJuegos extends UnicastRemoteObject implements Observador
         if (param.equals(Modelo.EVENTO_JUEGO_CERRADO)){
             if(!jugador.isEnJuego()) vista.habilitarIrAJuego(true);
         }
-        else if (param.equals(Modelo.EVENTO_STATSWINDOW)){
-            if(jugador.isStatsOn()) vista.habilitarEstadisticas(false);
-            else vista.habilitarEstadisticas(true);
-        }
         else if (param.equals(Modelo.EVENTO_NUEVA_MESA)){
             this.listarJuegos();
+        }
+        else if (param.equals(Modelo.EVENTO_STATSWINDOW)){
+            // traer jugador
+            jugador = modelo.getJugador(jugador.getOid());
+            if(jugador.isStatsOn()) {
+                vista.habilitarEstadisticas(false);
+            }
+            else vista.habilitarEstadisticas(true);
         }
     }
 }

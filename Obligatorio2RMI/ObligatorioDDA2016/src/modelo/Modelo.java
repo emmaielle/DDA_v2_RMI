@@ -174,6 +174,11 @@ public class Modelo extends ObservableRemotoV1 implements ModeloRemoto {
         return casino.crearYAgregarAMesa(j, n);
     }
 
+    @Override
+    public Jugador getJugador(int oid) throws RemoteException {
+        return sj.getJugador(oid);
+    }
+
 
 
 }

@@ -92,7 +92,8 @@ public class MapeadorRonda implements Persistente{
             if (r.getOid() != 0){
                 r.setOid(rs.getInt("oid"));
                 r.setFechaYhoraFin(new Date(rs.getTimestamp("fechaYhoraFin").getTime()));
-                r.setMesa(new Mesa(rs.getString("nomMesa")));
+                r.setMesa(new Mesa());
+                r.getMesa().setNombre(rs.getString("nomMesa"));
                 int valor = rs.getInt("nroSorteado");
                 r.setNroGanador(new Numero(valor));
             }
