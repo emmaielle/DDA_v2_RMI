@@ -118,7 +118,8 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         jugadoresMesa.remove(j);
         jugadoresEspera.remove(j);
         j.getJugador().setEnMesa(false);
-        if(jugadoresMesa.size()>0) buscarRonda(getUltimaRonda()).eliminarApuestas(j.getJugador());
+        //if(jugadoresMesa.size()>0) 
+            buscarRonda(getUltimaRonda()).eliminarApuestas(j.getJugador());
         if (!j.isApostado()) {
             if (!jugadoresMesa.isEmpty())
                 apuestaTotal();
