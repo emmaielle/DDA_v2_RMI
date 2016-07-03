@@ -180,7 +180,7 @@ public class Jugador implements Serializable{
     }
 
     public void agregarApuesta(Apuesta a){
-        if(a!=null) getApuestas().add(a);
+        if(a!=null) apuestas.add(a);
     }
 
     public void quitarApuesta(Apuesta a){

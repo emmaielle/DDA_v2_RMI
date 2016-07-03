@@ -24,13 +24,11 @@ public class Ronda implements Serializable, Observer{
     private int nroRonda;
     private ArrayList<Apuesta> apuestasGanadoras = new ArrayList<>();
     private Numero nroGanador = null;
-    //private String colorGanador; ///
     private ArrayList<Apuesta> apuestas = new ArrayList<>();
     private static int TIEMPO_LIMITE = 3; // minutos
     private MesaRemoto mesa;
     private Date fechaYhoraFin;
     private Proceso elProceso;
-
 
     // <editor-fold defaultstate="collapsed" desc="Constructor">   
     public Ronda(int numRonda, Mesa m) {
@@ -191,7 +189,8 @@ public class Ronda implements Serializable, Observer{
             mesa.buscarNumeroEnTablero(((ApuestaPleno)a).getNumeroTablero().getValor()).setApuesta(null);
 
         }
-        a.getJugador().quitarApuesta(a);
+        SistemaJugador.getInstancia().getJugador(a.getJugador().getOid()).quitarApuesta(a);
+        //a.getJugador().quitarApuesta(a);
         a.setJugador(null);
         a.setRonda(null);
         apuestas.remove(a);
@@ -203,7 +202,9 @@ public class Ronda implements Serializable, Observer{
             ((ApuestaPleno)a).getNumeroTablero().setApuesta(a);
             mesa.buscarNumeroEnTablero(((ApuestaPleno)a).getNumeroTablero().getValor()).setApuesta(a);
         }
-        a.getJugador().agregarApuesta(a);
+        SistemaJugador.getInstancia().getJugador(a.getJugador().getOid()).agregarApuesta(a);
+        //a.getJugador().agregarApuesta(a);
+        //(a.getRonda().getMesa().buscarJugador(a.getJugador())).getJugador().agregarApuesta(a);
         apuestas.add(a);
         Modelo.getInstancia().notificar(Modelo.EVENTO_TABLERO);
     }
