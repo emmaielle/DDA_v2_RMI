@@ -5,6 +5,7 @@
  */
 package modelo;
 
+import exceptions.InvalidUserActionException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -129,15 +130,14 @@ public class Ronda implements Serializable, Observer{
     }
     
     public ApuestaPleno buscarApuestaPorNumero(Numero n){
-        ApuestaPleno yaApostada = null;
         for (Apuesta a: apuestas){
             if (a instanceof ApuestaPleno){
                 ApuestaPleno ap = (ApuestaPleno)a;
-                if (ap.getNumeroTablero() == n)
-                    yaApostada = ap;
+                if (ap.getNumeroTablero().getValor() == n.getValor())
+                    return ap;
             }
         }
-        return yaApostada;
+        return null;
     }
     
     private Apuesta buscarApuestaPorTipo(String tipo) {
@@ -153,10 +153,10 @@ public class Ronda implements Serializable, Observer{
         return yaApostada;
     }
     
-    public void apostar(String numero, Numero n, int v, TipoJugador jugador) throws RemoteException { //funciona en ambos sentidos si se clickea de nuevo
+    public void apostar(String numero, Numero n, int v, TipoJugador jugador) throws RemoteException, InvalidUserActionException { //funciona en ambos sentidos si se clickea de nuevo
         Apuesta yaApostada = buscarApuestaPorTipo(numero);
         if (yaApostada == null){ // si entra aca es porque ese numero no fue elegido antes
-            Apuesta a = setApuestaByType(numero, v, jugador.getJugador(), n);
+            Apuesta a = setApuestaByType(numero, v, jugador.getJugador(), n, new Date());
             if (a.validar()){
                 if (!areThereBetsInThisRondaForThisPlayer(jugador)) {
                     jugador.setRondasSinApostarAnterior(jugador.getRondasSinApostar());
@@ -176,8 +176,9 @@ public class Ronda implements Serializable, Observer{
         if (!areThereBetsInThisRondaForThisPlayer(j)) j.setRondasSinApostar(j.getRondasSinApostarAnterior());
     }
     
-    public void desapostar(TipoJugador j, String tipo) throws RemoteException {
+    public void desapostar(TipoJugador j, String tipo) throws InvalidUserActionException, RemoteException {
         Apuesta yaApostada = buscarApuestaPorTipo(tipo);
+        if (yaApostada == null ) throw new InvalidUserActionException("Ingrese un monto a apostar");
         if (yaApostada.getJugador().equals(j.getJugador())) 
             quitarApuesta(yaApostada);
         if (!areThereBetsInThisRondaForThisPlayer(j)) j.setRondasSinApostar(j.getRondasSinApostarAnterior());
@@ -286,17 +287,17 @@ public class Ronda implements Serializable, Observer{
         elProceso.deleteObserver(this);
     }
 
-    public Apuesta setApuestaByType(String numero, int monto, Jugador jugador, Numero n) {
+    public Apuesta setApuestaByType(String numero, int monto, Jugador jugador, Numero n, Date fecha) {
         Apuesta a;
         if (n != null && numero.contains("Pleno")){
-            a = new ApuestaPleno(monto, jugador, numero, n, this, new Date());
+            a = new ApuestaPleno(monto, jugador, numero, n, this, fecha);
             n.setApuesta(a);
         }
         else if (numero.contains("Color")){
-            a = new ApuestaColor(monto, jugador, numero, this, new Date());
+            a = new ApuestaColor(monto, jugador, numero, this, fecha);
         }
         else if (numero.contains("Docena")){
-            a = new ApuestaDocena(monto, jugador, numero, this, new Date());
+            a = new ApuestaDocena(monto, jugador, numero, this, fecha);
         }
         else a = null;
         return a;

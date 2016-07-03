@@ -134,21 +134,30 @@ public class SistemaJugador {
         }
     }
 
-    Jugador getJugador(int oid) {
+    public Jugador getJugador(int oid) {
         for (Jugador j : jugadores){
             if (j.getOid() == oid) return j;
         }
         return null;
     }
 
-    void setStatsOn(boolean b, Jugador jugador) {
+    public void setStatsOn(boolean b, Jugador jugador) {
         Jugador j = buscarJugador(jugador.getNombre());
         j.setStatsOn(!b);
     }
 
-    void setEnJuego(Jugador jugador, boolean b) {
+    public void setEnJuego(Jugador jugador, boolean b) {
         Jugador j = buscarJugador(jugador.getNombre());
         j.setEnJuego(b);
+    }
+
+    public void setApuestasOn(Jugador j, boolean b) {
+        Jugador jugador = buscarJugador(j.getNombre());
+        jugador.setApuestasOn(false);
+    }
+
+    public ArrayList<Apuesta> getApuestas(Jugador j) {
+        return (buscarJugador(j.getNombre())).getApuestas();
     }
 
 }

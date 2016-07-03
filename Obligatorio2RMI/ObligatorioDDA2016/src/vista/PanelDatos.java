@@ -14,7 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
-import modelo.JugadorRuleta;
 import modelo.TipoJugador;
 
 /**

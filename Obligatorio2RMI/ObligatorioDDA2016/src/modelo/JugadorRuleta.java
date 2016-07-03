@@ -5,6 +5,7 @@
  */
 package modelo;
 
+import exceptions.InvalidUserActionException;
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.Objects;
@@ -84,24 +85,17 @@ public class JugadorRuleta implements Serializable, TipoJugador{
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Metodos">
-    @Override
-    public void agregarApuesta(Apuesta a){
-        if(a!=null) jugador.getApuestas().add(a);
-    }
+
 
     @Override
-    public void quitarApuesta(Apuesta a){
-        if (jugador.getApuestas().contains(a)) jugador.getApuestas().remove(a);
-    }
-
-    @Override
-    public boolean expulsado() {
-        return jugador.getSaldo() == 0;
+    public void expulsado() throws InvalidUserActionException {
+        if (jugador.getSaldo() == 0) throw new InvalidUserActionException("Se le acabo el saldo");
+        
     }
     
     @Override
-    public boolean sinApostarTresVeces(){
-        return this.rondasSinApostar > 2;
+    public void sinApostarTresVeces() throws InvalidUserActionException {
+        if (this.rondasSinApostar > 2) throw new InvalidUserActionException("Ha pasado 3 rondas sin apostar");
     }
     
     

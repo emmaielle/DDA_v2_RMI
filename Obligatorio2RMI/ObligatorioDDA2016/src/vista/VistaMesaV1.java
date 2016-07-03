@@ -153,7 +153,6 @@ public class VistaMesaV1 extends javax.swing.JDialog implements VistaMesa, Actio
     @Override
     public void cerrarVentana(String msj) {
         JOptionPane.showMessageDialog(this, msj);
-        salirDeMesa();
         dispose();
     }
 

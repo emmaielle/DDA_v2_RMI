@@ -5,6 +5,7 @@
  */
 package observadorRemoto;
 
+import exceptions.InvalidUserActionException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class ObservableRemotoProceso implements ObservableRemoto{
         observadores.remove(obs);
     }
     
-    public void notificar(){
+    public void notificar() {
         notificar(null);
     }
     public void notificar(Serializable param){

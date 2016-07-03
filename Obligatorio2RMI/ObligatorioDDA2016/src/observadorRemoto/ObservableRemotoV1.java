@@ -5,6 +5,7 @@
  */
 package observadorRemoto;
 
+import exceptions.InvalidUserActionException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -32,10 +33,10 @@ public class ObservableRemotoV1 extends UnicastRemoteObject implements Observabl
         observadores.remove(obs);
     }
     
-    public void notificar(){
+    public void notificar() {
         notificar(null);
     }
-    public void notificar(Serializable param){
+    public void notificar(Serializable param) {
         ArrayList<ObservadorRemoto> copia = new ArrayList();
         copia.addAll(observadores);
         for(ObservadorRemoto obs:copia){

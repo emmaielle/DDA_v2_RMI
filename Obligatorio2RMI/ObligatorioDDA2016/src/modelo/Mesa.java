@@ -264,7 +264,7 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         
         if (v.equals("")) {
             desapostar(n, jugador);
-            if (!numero.split(" ")[0].equals("Pleno")) throw new InvalidUserActionException("");
+            //if (!numero.split(" ")[0].equals("Pleno")) throw new InvalidUserActionException("");
         } 
         else {
             int montoInt = Integer.parseInt(v);
@@ -284,8 +284,10 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
     public void desapostar(Numero n, TipoJugador jugador) throws InvalidUserActionException, RemoteException {
         if(jugador.isApostado()) throw new InvalidUserActionException("Ya ha finalizado su apuesta");
         for(TipoJugador jr:jugadoresMesa){
-            if(jugador==jr)
-                if (n!=null && n.getApuesta() != null) (buscarRonda(getUltimaRonda())).desapostar(jugador, n);
+            if(jugador.getJugador().getNombre().equals(jr.getJugador().getNombre())){
+                if (n == null || n.getApuesta() == null) throw new InvalidUserActionException("Debe elegir un monto para apostar");
+                (buscarRonda(getUltimaRonda())).desapostar(jugador, n);
+            }
         }
         Modelo.getInstancia().notificar(Modelo.EVENTO_ACTUALIZA_SALDOS);
     }
@@ -395,7 +397,7 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
 
     private void persistoJugador(TipoJugador jr, BaseDatos bd) {
         MapeadorJugador map = new MapeadorJugador();
-        ArrayList jugadores = bd.consultar(map, " and u.oid = "+jr.getJugador().getOid());
+        ArrayList jugadores = bd.consultar(map, " and u.oid = "+jr.getJugador().getOid()); // esto podria ser diferente
         Jugador j = (Jugador) jugadores.get(0);
         map.setJ(j);
         j.setSaldo(jr.getJugador().getSaldo());

@@ -48,7 +48,8 @@ public class JuegoRuleta implements Serializable {
     }
     
     public void cerrarMesa(MesaRemoto m) throws RemoteException{
-        listadoMesas.remove(m);
+        MesaRemoto msa = buscarMesa(m.getNombre());
+        listadoMesas.remove(msa);
         //(m.buscarRonda(m.getUltimaRonda())).stopProceso();
         Modelo.getInstancia().notificar(Modelo.EVENTO_SALIR_MESA);
     }

@@ -5,6 +5,7 @@
  */
 package modelo;
 
+import exceptions.InvalidUserActionException;
 import java.awt.Color;
 
 /**
@@ -36,11 +37,7 @@ public interface TipoJugador {
 
     public void setRondasSinApostar(int rondasSinApostar);
     
-    public void agregarApuesta(Apuesta a);
-
-    public void quitarApuesta(Apuesta a);
-
-    public boolean expulsado();
+    public void expulsado() throws InvalidUserActionException;
     
-    public boolean sinApostarTresVeces();
+    public void sinApostarTresVeces() throws InvalidUserActionException;
 }

@@ -7,6 +7,7 @@ package modelo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 
@@ -98,7 +99,7 @@ public class Jugador implements Serializable{
     }
 
     //agregue para la persistencia... ver
-    public void setSaldo(long saldo) {
+    public void setSaldo(long saldo){
         this.saldo = saldo;
     }
 
@@ -168,10 +169,10 @@ public class Jugador implements Serializable{
     
     // </editor-fold>
 
-    public void agregarApuesta(String tipoApuesta, int montoApostado, Ronda r, int montGan) {
+    public void agregarApuesta(String tipoApuesta, int montoApostado, Ronda r, int montGan, Date fecha) {
         Numero num = null;
         if (tipoApuesta.contains("Pleno")) num = new Numero(Integer.parseInt(tipoApuesta.split(" ")[1]));;
-        Apuesta a = r.setApuestaByType(tipoApuesta, montoApostado, this, num);
+        Apuesta a = r.setApuestaByType(tipoApuesta, montoApostado, this, num, fecha);
         r.agregar(a);
         a.setJugador(this);
         a.setMontoGanado(montGan);

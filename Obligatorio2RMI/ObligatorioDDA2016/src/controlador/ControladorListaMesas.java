@@ -101,6 +101,7 @@ public class ControladorListaMesas extends UnicastRemoteObject implements Observ
             listarMesas();
         }
         else if (param.equals(Modelo.EVENTO_APUESTASWINDOW)){
+            jugador = modelo.getJugador(jugador.getOid());
             if (jugador.isApuestasOn()) vista.habilitarApuestas(false);
             else vista.habilitarApuestas(true);
         }

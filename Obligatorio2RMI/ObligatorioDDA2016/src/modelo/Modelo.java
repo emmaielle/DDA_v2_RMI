@@ -188,5 +188,15 @@ public class Modelo extends ObservableRemotoV1 implements ModeloRemoto {
         sj.setEnJuego(jugador, b);
     }
 
+    @Override
+    public void setApuestasOn(Jugador j, boolean b) throws RemoteException {
+        sj.setApuestasOn(j, b);
+    }
+
+    @Override
+    public ArrayList<Apuesta> getApuestas(Jugador j) throws RemoteException {
+        return sj.getApuestas(j);
+    }
+
 
 }
