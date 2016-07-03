@@ -31,6 +31,7 @@ public class ControladorEstadisticas extends UnicastRemoteObject implements Obse
     public ControladorEstadisticas(VistaEstadisticas vista, Jugador jugador) throws RemoteException{
         try {
             this.vista = vista;
+            //System.setProperty("java.rmi.server.hostname","179.25.157.190");
             this.modelo = (ModeloRemoto)Naming.lookup("rmi://localhost/modelo");
             this.jugador = jugador;
             modelo.agregar(this);
