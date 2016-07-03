@@ -22,6 +22,8 @@ public class JuegoRuleta implements Serializable {
     private static final JuegoRuleta instancia = new JuegoRuleta();
     private ArrayList<MesaRemoto> listadoMesas = new ArrayList();
     
+    // <editor-fold defaultstate="collapsed" desc="Constructor"> 
+
     private JuegoRuleta() {
     }
 
@@ -29,6 +31,8 @@ public class JuegoRuleta implements Serializable {
         return instancia;
     }
 
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Getters y setters"> 
 
     public ArrayList<MesaRemoto> getListadoMesas() {
@@ -88,8 +92,6 @@ public class JuegoRuleta implements Serializable {
         return "Ruleta (" + this.listadoMesas.size() + ")";
     }
     
-    // </editor-fold>
-
     public MesaRemoto crearYAgregarAMesa(Jugador j, String n) {
         Mesa m = null;
         try {
@@ -104,5 +106,7 @@ public class JuegoRuleta implements Serializable {
         }
         return m;
     }
+    
+    // </editor-fold>
 
 }

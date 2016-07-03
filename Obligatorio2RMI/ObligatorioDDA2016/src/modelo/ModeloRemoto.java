@@ -16,7 +16,6 @@ import observadorRemoto.ObservableRemoto;
  * @author Euge
  */
 public interface ModeloRemoto extends ObservableRemoto{
-//    public void obtenerTodos();
     public boolean isHabilitado() throws RemoteException;
     public Jugador login(String nom, String psw) throws InvalidUserActionException, RemoteException;
     public void logout(Jugador j) throws RemoteException;

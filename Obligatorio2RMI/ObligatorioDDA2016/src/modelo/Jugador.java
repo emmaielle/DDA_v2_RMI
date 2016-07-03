@@ -38,11 +38,12 @@ public class Jugador implements Serializable{
         this.nombreCompleto = nombreCompleto;
         this.saldo = saldo;
     }
-    //agregue para la persistencia ver....
+    
     public Jugador() {
     }
     
     //</editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Getters y setters"> 
     public String getNombre() {
         return nombre;
@@ -98,7 +99,6 @@ public class Jugador implements Serializable{
         return saldo;
     }
 
-    //agregue para la persistencia... ver
     public void setSaldo(long saldo){
         this.saldo = saldo;
     }
@@ -146,8 +146,6 @@ public class Jugador implements Serializable{
     public void setJugadorTipo(TipoJugador jugadorTipo) {
         this.jugadorTipo = jugadorTipo;
     }
-    
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Metodos"> 
@@ -167,8 +165,6 @@ public class Jugador implements Serializable{
         }
     }
     
-    // </editor-fold>
-
     public void agregarApuesta(String tipoApuesta, int montoApostado, Ronda r, int montGan, Date fecha) {
         Numero num = null;
         if (tipoApuesta.contains("Pleno")) num = new Numero(Integer.parseInt(tipoApuesta.split(" ")[1]));;
@@ -189,10 +185,7 @@ public class Jugador implements Serializable{
     
     @Override
     public boolean equals(Object obj) {
-        if (((Jugador)obj).getNombreCompleto().equals(this.getNombreCompleto())){
-            return true;
-        }
-        return false;
+        return ((Jugador)obj).getNombreCompleto().equals(this.getNombreCompleto());
     }
 
     @Override
@@ -201,4 +194,6 @@ public class Jugador implements Serializable{
         hash = 97 * hash + Objects.hashCode(this.nombreCompleto);
         return hash;
     }
+    
+    // </editor-fold>
 }

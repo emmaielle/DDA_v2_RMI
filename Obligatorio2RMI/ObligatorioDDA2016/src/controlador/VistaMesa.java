@@ -7,7 +7,6 @@ package controlador;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import modelo.JugadorRuleta;
 import modelo.Numero;
 import modelo.TipoJugador;
 
@@ -29,6 +28,5 @@ public interface VistaMesa {
     public void colorSaldo(Color color);
     public void colorJugador(Color color);
     public void mostrarSegundos(int s);
-
     public void resetButtons();
 }

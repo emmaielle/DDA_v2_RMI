@@ -49,12 +49,6 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
         }
     }
     
-    /**
-     *
-     * @param origen
-     * @param param
-     * @throws RemoteException
-     */
     @Override
     public void actualizar(ObservableRemoto origen, Serializable param) throws RemoteException {
         if (param.equals(Modelo.EVENTO_ADD_SECONDS)){

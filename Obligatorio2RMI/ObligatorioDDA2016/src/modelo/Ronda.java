@@ -98,7 +98,7 @@ public class Ronda implements Serializable, Observer{
     public void setFechaYhoraFin(Date fechaYhoraFin) {
         this.fechaYhoraFin = fechaYhoraFin;
     }
-    //agregue para la persistencia
+    
     public void setNroGanador(Numero nroGanador) {
         this.nroGanador = nroGanador;
     }
@@ -106,8 +106,6 @@ public class Ronda implements Serializable, Observer{
     public Proceso getElProceso() {
         return elProceso;
     }
-    
-    
     
     // </editor-fold>
 
@@ -211,9 +209,8 @@ public class Ronda implements Serializable, Observer{
 
     private void lookForWinner() throws RemoteException {
         for (Apuesta a : apuestas){
-            if (a.esGanadora(nroGanador)) {
+            if (a.esGanadora(nroGanador))
                 apuestasGanadoras.add(a);
-            }
             modificarSaldos(a);
         }
     }
@@ -262,7 +259,6 @@ public class Ronda implements Serializable, Observer{
         }
         return false;
     }
-    // </editor-fold>
 
     @Override
     public void update(java.util.Observable o, Object arg)   {
@@ -325,4 +321,6 @@ public class Ronda implements Serializable, Observer{
         }
         apuestas.add(a);
     }
+    
+    // </editor-fold>
 }

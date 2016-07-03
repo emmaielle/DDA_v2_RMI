@@ -17,6 +17,8 @@ public class ApuestaDocena extends Apuesta {
 
     private static final int COEFICIENTE_PAGO = 3;
     
+    // <editor-fold defaultstate="collapsed" desc="Constructor">
+    
     public ApuestaDocena(int monto, Jugador jugador, String numero, Ronda ronda, Date fechaHora) {
         super(monto, jugador, numero, ronda, fechaHora);
     }
@@ -25,6 +27,8 @@ public class ApuestaDocena extends Apuesta {
         super(monto, numero, ronda, fechaHora);
     }
 
+    // </editor-fold>
+    
     @Override
     public int getCoeficientePago() {
         return COEFICIENTE_PAGO;

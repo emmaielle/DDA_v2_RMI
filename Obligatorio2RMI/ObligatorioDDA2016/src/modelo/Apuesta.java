@@ -98,14 +98,16 @@ public abstract class Apuesta implements Serializable {
     
     public abstract int getCoeficientePago();
     
+    public abstract String getTipo();
+    
+    public abstract boolean esGanadora(Numero numero);
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Metodos"> 
     public boolean validar() {
         return monto > 0 && jugador != null && numero != null; 
     }
-    
-    // </editor-fold>
 
     @Override
     public String toString() {
@@ -124,8 +126,5 @@ public abstract class Apuesta implements Serializable {
         return ret;
     }
 
-    public abstract String getTipo();
-    
-    public abstract boolean esGanadora(Numero numero);
-    
+    // </editor-fold>
 }

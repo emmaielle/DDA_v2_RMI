@@ -9,6 +9,7 @@ public class ApuestaPleno extends Apuesta {
     private Numero numeroTablero;
     private static final int COEFICIENTE_PAGO = 35;
 
+    // <editor-fold defaultstate="collapsed" desc="Constructor">
     
     public ApuestaPleno(int monto, Jugador jugador, String sNumero, Numero numero, Ronda ronda, Date fechaHora) {
         super(monto, jugador, sNumero, ronda, fechaHora);
@@ -20,6 +21,8 @@ public class ApuestaPleno extends Apuesta {
             this.numeroTablero = numero;
     }
 
+    // </editor-fold>
+    
     public Numero getNumeroTablero() {
         return numeroTablero;
     }

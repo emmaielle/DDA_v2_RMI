@@ -21,7 +21,7 @@ public class Proceso implements Runnable, Serializable {
     private transient Thread hilo;
     private boolean ejecutar = false;
     private int segundos;
-    private transient MiObservable observable = new MiObservable();
+    private final transient MiObservable observable = new MiObservable();
     
     public Proceso(){
         
@@ -52,7 +52,6 @@ public class Proceso implements Runnable, Serializable {
 
     public void parar(){
         ejecutar=false;
-        //para cortar el sleep
         hilo.interrupt();
     }
     
@@ -60,9 +59,7 @@ public class Proceso implements Runnable, Serializable {
         segundos = 0;
         avisar(Proceso.EVENTO_ADD_SECONDS);
     }
-    
-    
-    
+
     @Override
     public void run() {
         for (;segundos< Ronda.getTIEMPO_LIMITE()*60&&ejecutar;segundos++){
@@ -70,10 +67,10 @@ public class Proceso implements Runnable, Serializable {
             try {
                 hilo.sleep(1000);               
             } catch (InterruptedException ex) {
-
+                System.err.println("modelo.Proceso.run() " + ex.getMessage());
             }
         }
-        ejecutar=false;    
+        ejecutar = false;    
         reset();
         avisar(Proceso.EVENTO_TIME_OUT);
     }

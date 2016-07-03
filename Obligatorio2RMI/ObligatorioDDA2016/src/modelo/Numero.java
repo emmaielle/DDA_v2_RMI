@@ -59,11 +59,11 @@ public class Numero implements Serializable{
     public int getDocena() {
         return this.docena;
     }
-    
-    
-    
+ 
     // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="Metodos"> 
+    
     @Override
     public String toString() {
         String j = "Sin marcar";
@@ -77,5 +77,5 @@ public class Numero implements Serializable{
         else this.docena = 3;
     }
     
-    
+    // </editor-fold>
 }

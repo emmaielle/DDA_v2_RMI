@@ -45,7 +45,7 @@ public class MapeadorJugador implements Persistente {
     public void setOid(int oid) {
         j.setOid(oid);
     }
-    //deje el insert update y delete para hacer la carga automatica a la base
+    
     @Override
     public ArrayList<String> getSqlInsert() {
         ArrayList<String> sqls = new ArrayList();
