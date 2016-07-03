@@ -5,6 +5,7 @@
  */
 package modelo;
 
+import exceptions.InvalidUserActionException;
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.Objects;
@@ -31,83 +32,80 @@ public class JugadorRuleta implements Serializable, TipoJugador{
     //</editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters y setters"> 
+    @Override
     public Jugador getJugador() {
         return jugador;
     }
 
+    @Override
     public void setJugador(Jugador jugador) {
         this.jugador = jugador;
     }
 
+    @Override
     public int getRondasSinApostarAnterior() {
         return rondasSinApostarAnterior;
     }
 
+    @Override
     public void setRondasSinApostarAnterior(int rondasSinApostarAnterior) {
         this.rondasSinApostarAnterior = rondasSinApostarAnterior;
     }
     
+    @Override
     public Mesa getMesa() {
         return mesa;
     }
 
+    @Override
     public void setMesa(Mesa mesa) {
         this.mesa = mesa;
     }
     
+    @Override
     public Color getColor() {
         return color;
     }
 
+    @Override
     public void setColor(Color color) {
         this.color = color;
     }
 
+    @Override
     public void setApostado(boolean apostado) {
         this.apostado = apostado;
     }
 
+    @Override
     public boolean isApostado() {
         return apostado;
     }
 
+    @Override
     public int getRondasSinApostar() {
         return rondasSinApostar;
     }
 
+    @Override
     public void setRondasSinApostar(int rondasSinApostar) {
         this.rondasSinApostar = rondasSinApostar;
     }
-    
-    
-    
+
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Metodos">
-    @Override
-    public void agregarApuesta(Apuesta a){
-        if(a!=null) jugador.getApuestas().add(a);
-    }
 
     @Override
-    public void quitarApuesta(Apuesta a){
-        if (jugador.getApuestas().contains(a)) jugador.getApuestas().remove(a);
-    }
-
-    @Override
-    public boolean expulsado() {
-        return jugador.getSaldo() == 0;
+    public void expulsado() throws InvalidUserActionException {
+        if (jugador.getSaldo() == 0) throw new InvalidUserActionException("Se le acabo el saldo");
     }
     
     @Override
-    public boolean sinApostarTresVeces(){
-        return this.rondasSinApostar > 2;
+    public void sinApostarTresVeces() throws InvalidUserActionException {
+        if (this.rondasSinApostar > 2) throw new InvalidUserActionException("Ha pasado 3 rondas sin apostar");
     }
     
-    
-    
-    // </editor-fold>
-
     @Override
     public boolean equals(Object obj) {
         return ((JugadorRuleta)obj).getJugador().equals(this.getJugador());
@@ -119,6 +117,10 @@ public class JugadorRuleta implements Serializable, TipoJugador{
         hash = 83 * hash + Objects.hashCode(this.jugador);
         return hash;
     }
+    
+    // </editor-fold>
+
+
 
 
 }

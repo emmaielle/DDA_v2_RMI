@@ -5,6 +5,7 @@
  */
 package observadorRemoto;
 
+import exceptions.InvalidUserActionException;
 import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;

@@ -28,7 +28,7 @@ public class ObservableRemotoProceso implements ObservableRemoto{
         observadores.remove(obs);
     }
     
-    public void notificar(){
+    public void notificar() {
         notificar(null);
     }
     public void notificar(Serializable param){

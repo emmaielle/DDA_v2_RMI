@@ -44,7 +44,12 @@ public class ControladorApuestas extends UnicastRemoteObject implements Observad
     }
 
     public ArrayList<Apuesta> cargarApuestas() {
-        return j.getApuestas();
+        try {
+            return modelo.getApuestas(j);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorApuestas.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
     public ArrayList<Apuesta> cargarApuestasPorRonda(Apuesta a) {
@@ -53,7 +58,7 @@ public class ControladorApuestas extends UnicastRemoteObject implements Observad
 
     public void salirDeApuestas() {
         try {
-            j.setApuestasOn(false);
+            modelo.setApuestasOn(j, false);
             modelo.quitar(this);
         } catch (RemoteException ex) {
             Logger.getLogger(ControladorApuestas.class.getName()).log(Level.SEVERE, null, ex);

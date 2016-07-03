@@ -16,6 +16,8 @@ public class ApuestaColor extends Apuesta {
 
     private static final int COEFICIENTE_PAGO = 2;
     
+    // <editor-fold defaultstate="collapsed" desc="Constructor">
+    
     public ApuestaColor(int monto, Jugador jugador, String sNumero, Ronda ronda, Date fechaHora) {
         super(monto, jugador, sNumero, ronda, fechaHora);
     }
@@ -24,6 +26,8 @@ public class ApuestaColor extends Apuesta {
         super(monto, sNumero, ronda, fechaHora);
     }
 
+    // </editor-fold>
+    
     @Override
     public int getCoeficientePago() {
         return COEFICIENTE_PAGO;
@@ -40,7 +44,7 @@ public class ApuestaColor extends Apuesta {
         Color selected = Color.GREEN;
         if (color.equals("RED")) selected = Color.RED;
         if (color.equals("BLACK")) selected = Color.BLACK;
-        return numero.getColor().equals(selected); //check
+        return numero.getColor().equals(selected); 
     }
 	 
 }

@@ -5,6 +5,7 @@
  */
 package modelo;
 
+import exceptions.InvalidUserActionException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -23,13 +24,11 @@ public class Ronda implements Serializable, Observer{
     private int nroRonda;
     private ArrayList<Apuesta> apuestasGanadoras = new ArrayList<>();
     private Numero nroGanador = null;
-    //private String colorGanador; ///
     private ArrayList<Apuesta> apuestas = new ArrayList<>();
     private static int TIEMPO_LIMITE = 3; // minutos
     private MesaRemoto mesa;
     private Date fechaYhoraFin;
     private Proceso elProceso;
-
 
     // <editor-fold defaultstate="collapsed" desc="Constructor">   
     public Ronda(int numRonda, Mesa m) {
@@ -99,7 +98,7 @@ public class Ronda implements Serializable, Observer{
     public void setFechaYhoraFin(Date fechaYhoraFin) {
         this.fechaYhoraFin = fechaYhoraFin;
     }
-    //agregue para la persistencia
+    
     public void setNroGanador(Numero nroGanador) {
         this.nroGanador = nroGanador;
     }
@@ -107,8 +106,6 @@ public class Ronda implements Serializable, Observer{
     public Proceso getElProceso() {
         return elProceso;
     }
-    
-    
     
     // </editor-fold>
 
@@ -129,15 +126,14 @@ public class Ronda implements Serializable, Observer{
     }
     
     public ApuestaPleno buscarApuestaPorNumero(Numero n){
-        ApuestaPleno yaApostada = null;
         for (Apuesta a: apuestas){
             if (a instanceof ApuestaPleno){
                 ApuestaPleno ap = (ApuestaPleno)a;
-                if (ap.getNumeroTablero() == n)
-                    yaApostada = ap;
+                if (ap.getNumeroTablero().getValor() == n.getValor())
+                    return ap;
             }
         }
-        return yaApostada;
+        return null;
     }
     
     private Apuesta buscarApuestaPorTipo(String tipo) {
@@ -153,10 +149,10 @@ public class Ronda implements Serializable, Observer{
         return yaApostada;
     }
     
-    public void apostar(String numero, Numero n, int v, TipoJugador jugador) throws RemoteException { //funciona en ambos sentidos si se clickea de nuevo
+    public void apostar(String numero, Numero n, int v, TipoJugador jugador) throws RemoteException, InvalidUserActionException { //funciona en ambos sentidos si se clickea de nuevo
         Apuesta yaApostada = buscarApuestaPorTipo(numero);
         if (yaApostada == null){ // si entra aca es porque ese numero no fue elegido antes
-            Apuesta a = setApuestaByType(numero, v, jugador.getJugador(), n);
+            Apuesta a = setApuestaByType(numero, v, jugador.getJugador(), n, new Date());
             if (a.validar()){
                 if (!areThereBetsInThisRondaForThisPlayer(jugador)) {
                     jugador.setRondasSinApostarAnterior(jugador.getRondasSinApostar());
@@ -176,8 +172,9 @@ public class Ronda implements Serializable, Observer{
         if (!areThereBetsInThisRondaForThisPlayer(j)) j.setRondasSinApostar(j.getRondasSinApostarAnterior());
     }
     
-    public void desapostar(TipoJugador j, String tipo) throws RemoteException {
+    public void desapostar(TipoJugador j, String tipo) throws InvalidUserActionException, RemoteException {
         Apuesta yaApostada = buscarApuestaPorTipo(tipo);
+        if (yaApostada == null ) throw new InvalidUserActionException("Ingrese un monto a apostar");
         if (yaApostada.getJugador().equals(j.getJugador())) 
             quitarApuesta(yaApostada);
         if (!areThereBetsInThisRondaForThisPlayer(j)) j.setRondasSinApostar(j.getRondasSinApostarAnterior());
@@ -190,7 +187,8 @@ public class Ronda implements Serializable, Observer{
             mesa.buscarNumeroEnTablero(((ApuestaPleno)a).getNumeroTablero().getValor()).setApuesta(null);
 
         }
-        a.getJugador().quitarApuesta(a);
+        SistemaJugador.getInstancia().getJugador(a.getJugador().getOid()).quitarApuesta(a);
+        //a.getJugador().quitarApuesta(a);
         a.setJugador(null);
         a.setRonda(null);
         apuestas.remove(a);
@@ -202,16 +200,17 @@ public class Ronda implements Serializable, Observer{
             ((ApuestaPleno)a).getNumeroTablero().setApuesta(a);
             mesa.buscarNumeroEnTablero(((ApuestaPleno)a).getNumeroTablero().getValor()).setApuesta(a);
         }
-        a.getJugador().agregarApuesta(a);
+        SistemaJugador.getInstancia().getJugador(a.getJugador().getOid()).agregarApuesta(a);
+        //a.getJugador().agregarApuesta(a);
+        //(a.getRonda().getMesa().buscarJugador(a.getJugador())).getJugador().agregarApuesta(a);
         apuestas.add(a);
         Modelo.getInstancia().notificar(Modelo.EVENTO_TABLERO);
     }
 
     private void lookForWinner() throws RemoteException {
         for (Apuesta a : apuestas){
-            if (a.esGanadora(nroGanador)) {
+            if (a.esGanadora(nroGanador))
                 apuestasGanadoras.add(a);
-            }
             modificarSaldos(a);
         }
     }
@@ -260,7 +259,6 @@ public class Ronda implements Serializable, Observer{
         }
         return false;
     }
-    // </editor-fold>
 
     @Override
     public void update(java.util.Observable o, Object arg)   {
@@ -286,17 +284,17 @@ public class Ronda implements Serializable, Observer{
         elProceso.deleteObserver(this);
     }
 
-    public Apuesta setApuestaByType(String numero, int monto, Jugador jugador, Numero n) {
+    public Apuesta setApuestaByType(String numero, int monto, Jugador jugador, Numero n, Date fecha) {
         Apuesta a;
         if (n != null && numero.contains("Pleno")){
-            a = new ApuestaPleno(monto, jugador, numero, n, this, new Date());
+            a = new ApuestaPleno(monto, jugador, numero, n, this, fecha);
             n.setApuesta(a);
         }
         else if (numero.contains("Color")){
-            a = new ApuestaColor(monto, jugador, numero, this, new Date());
+            a = new ApuestaColor(monto, jugador, numero, this, fecha);
         }
         else if (numero.contains("Docena")){
-            a = new ApuestaDocena(monto, jugador, numero, this, new Date());
+            a = new ApuestaDocena(monto, jugador, numero, this, fecha);
         }
         else a = null;
         return a;
@@ -323,4 +321,6 @@ public class Ronda implements Serializable, Observer{
         }
         apuestas.add(a);
     }
+    
+    // </editor-fold>
 }

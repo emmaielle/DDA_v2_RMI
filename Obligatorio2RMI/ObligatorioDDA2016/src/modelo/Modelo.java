@@ -18,8 +18,8 @@ import observadorRemoto.ObservableRemotoV1;
  * @author Euge
  */
 public class Modelo extends ObservableRemotoV1 implements ModeloRemoto {
-    private SistemaJugador sj = SistemaJugador.getInstancia();
-    private Casino casino = Casino.getInstancia();
+    private final SistemaJugador sj = SistemaJugador.getInstancia();
+    private final Casino casino = Casino.getInstancia();
     private static Modelo instancia;
     public static final int EVENTO_LOGIN = 1;
     public static final int EVENTO_LOGUEADOS= 2;
@@ -36,7 +36,8 @@ public class Modelo extends ObservableRemotoV1 implements ModeloRemoto {
     public static final int EVENTO_SIN_JUGAR = 13;
     public static final int EVENTO_APUESTASWINDOW = 14;
 
-    
+    // <editor-fold defaultstate="collapsed" desc="Constructor">   
+
     protected static Modelo getInstancia(){
         if (instancia == null){
             try {
@@ -50,22 +51,14 @@ public class Modelo extends ObservableRemotoV1 implements ModeloRemoto {
     
     private Modelo() throws RemoteException{
     }
-
     
+    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Metodos Sistema Jugador">   
-//    public void persistirJugadores(){
-//        sj.persistoJugadores();
-//    }
     
     public void obtenerTodos(){
         sj.obtenerJugadores();
     }
-    
-    // capaz?
-//    public void cargarJugadores(ArrayList<Object> j){
-//        sj.cargarJugadores(j);
-//    }
 
     @Override
     public boolean isHabilitado() throws RemoteException {
@@ -124,6 +117,31 @@ public class Modelo extends ObservableRemotoV1 implements ModeloRemoto {
         casino.getRuleta().unirJugadorAMesaRuleta(j, m, c);
     }
     
+    @Override
+    public Jugador getJugador(int oid) throws RemoteException {
+        return sj.getJugador(oid);
+    }
+
+    @Override
+    public void setStatsOn(Jugador jugador, boolean habilitar) throws RemoteException {
+        sj.setStatsOn(habilitar, jugador);
+    }
+
+    @Override
+    public void setEnJuego(Jugador jugador, boolean b) throws RemoteException {
+        sj.setEnJuego(jugador, b);
+    }
+
+    @Override
+    public void setApuestasOn(Jugador j, boolean b) throws RemoteException {
+        sj.setApuestasOn(j, b);
+    }
+
+    @Override
+    public ArrayList<Apuesta> getApuestas(Jugador j) throws RemoteException {
+        return sj.getApuestas(j);
+    }
+        
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Metodos mesa">  
@@ -166,27 +184,12 @@ public class Modelo extends ObservableRemotoV1 implements ModeloRemoto {
     public boolean estaEnEspera(TipoJugador jugador, MesaRemoto mesa) throws RemoteException{
         return mesa.estaEnEspera(jugador);
     }
-    // </editor-fold>
 
     @Override
     public MesaRemoto nuevaMesa(String n, Jugador j) throws RemoteException, InvalidUserActionException {
         return casino.getRuleta().crearYAgregarAMesa(j, n);
     }
 
-    @Override
-    public Jugador getJugador(int oid) throws RemoteException {
-        return sj.getJugador(oid);
-    }
-
-    @Override
-    public void setStatsOn(Jugador jugador, boolean habilitar) throws RemoteException {
-        sj.setStatsOn(habilitar, jugador);
-    }
-
-    @Override
-    public void setEnJuego(Jugador jugador, boolean b) throws RemoteException {
-        sj.setEnJuego(jugador, b);
-    }
-
+    // </editor-fold>
 
 }

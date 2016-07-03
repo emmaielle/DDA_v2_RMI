@@ -37,7 +37,6 @@ public class MapeadorRonda implements Persistente{
         this.r = r;
     }
     
-    
     @Override
     public int getOid() {
         if(r==null) return 0;

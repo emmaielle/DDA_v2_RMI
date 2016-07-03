@@ -19,11 +19,11 @@ import java.util.ArrayList;
 public class BaseDatos {
    private Connection conexion;
     private Statement stmt;
-    private static BaseDatos instancia = new BaseDatos(); 
+    private static final BaseDatos instancia = new BaseDatos(); 
 
-    private final String URL="jdbc:mysql://localhost:3306/obligatoriodda2016";
-    private final String USER="root";
-    private final String PASS="";
+    private final String URL = "jdbc:mysql://localhost:3306/obligatoriodda2016";
+    private final String USER = "root";
+    private final String PASS = "";
     
     public static BaseDatos getInstancia() {
         return instancia;
@@ -74,11 +74,12 @@ public class BaseDatos {
                 modificar("UPDATE parametros set valor=" + (oid+1) + " where nombre='oid'");
             }
         } catch (SQLException ex) {
-                System.out.println("Error al obtener proximo oid");
+                System.out.println("Error al obtener proximo oid" + ex.getMessage());
                 return oid;
         }
         return oid;
     }
+    
     ///// Metodos especificos para persistencia
     
     public void guardar(Persistente p){

@@ -137,7 +137,7 @@ public class VistaJuegosV1 extends javax.swing.JDialog implements VistaJuegos {
     public void mostrarEstadisticas() {
         vistaEstadisticas = new VistaEstadisticasV1(jugador);
         vistaEstadisticas.setVisible(true);
-        jugador.setStatsOn(true);
+        jugador.setStatsOn(true); ///THIS?
         habilitarEstadisticas(false);
     }
 

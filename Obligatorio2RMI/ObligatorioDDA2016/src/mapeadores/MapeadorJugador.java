@@ -8,7 +8,9 @@ package mapeadores;
 import java.rmi.RemoteException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.Jugador;
@@ -43,7 +45,7 @@ public class MapeadorJugador implements Persistente {
     public void setOid(int oid) {
         j.setOid(oid);
     }
-    //deje el insert update y delete para hacer la carga automatica a la base
+    
     @Override
     public ArrayList<String> getSqlInsert() {
         ArrayList<String> sqls = new ArrayList();
@@ -90,12 +92,12 @@ public class MapeadorJugador implements Persistente {
                 String num = rs.getString("numero");
                 int monto = rs.getInt("monto");
                 int ganado = rs.getInt("montoGanado");
-
+                Date fecha = new Timestamp(rs.getTimestamp("fechaHoraCreacion").getTime());
                 Ronda r;
                     r = new Ronda();
                 
                 r.setOid(oidRonda);
-                j.agregarApuesta(num,monto,r,ganado);
+                j.agregarApuesta(num,monto,r,ganado, fecha);
             }
             
         } catch (SQLException ex) {

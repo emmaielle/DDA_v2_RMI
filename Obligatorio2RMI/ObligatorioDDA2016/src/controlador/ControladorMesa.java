@@ -49,21 +49,18 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
         }
     }
     
-    /**
-     *
-     * @param origen
-     * @param param
-     * @throws RemoteException
-     */
     @Override
     public void actualizar(ObservableRemoto origen, Serializable param) throws RemoteException {
         if (param.equals(Modelo.EVENTO_ADD_SECONDS)){
             vista.mostrarSegundos(mesa.buscarRonda(mesa.getUltimaRonda()).getElProceso().getSegundos());
         }
         else if (param.equals(Modelo.EVENTO_SIN_JUGAR)){
-            //vista.mostrarSegundos(Proceso.getSegundos());
-            //System.out.println("Echar de mesa!!");
-            echarDeMesaPorNoJugar();
+            try {
+                jugador.sinApostarTresVeces();
+            } catch (InvalidUserActionException ex) {
+                vista.cerrarVentana(ex.getMessage());
+                salirDeMesa();
+            }
         }
         else if(param.equals(Modelo.EVENTO_TABLERO)){
             mostrarNum();
@@ -82,8 +79,13 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
             vista.mostrarJugadores(modelo.getJugadoresPorMesa(mesa));
         }
         else if (param.equals(Modelo.EVENTO_CHECK_SALDOS)){
-            jugador = mesa.buscarJugador(jugador.getJugador());
-            if (jugador.expulsado()) vista.cerrarVentana("Se le terminó el saldo");
+            try {
+                jugador = mesa.buscarJugador(jugador.getJugador());
+                jugador.expulsado();
+            } catch (InvalidUserActionException ex) {
+                vista.cerrarVentana(ex.getMessage());
+                salirDeMesa();
+            } 
         }
         else if(param.equals(Modelo.EVENTO_ACTUALIZA_SALDOS))
             jugador = mesa.buscarJugador(jugador.getJugador());
@@ -162,10 +164,6 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
 
     public void colorJugador(Color color) {
         vista.colorJugador(color);
-    }
-    
-    public void echarDeMesaPorNoJugar(){
-        if (jugador.sinApostarTresVeces()) vista.cerrarVentana("Ha pasado 3 rondas sin apostar");
     }
 
     public void desapostar(String tipo) throws InvalidUserActionException, RemoteException{

@@ -16,7 +16,6 @@ import observadorRemoto.ObservableRemoto;
  * @author Euge
  */
 public interface ModeloRemoto extends ObservableRemoto{
-//    public void obtenerTodos();
     public boolean isHabilitado() throws RemoteException;
     public Jugador login(String nom, String psw) throws InvalidUserActionException, RemoteException;
     public void logout(Jugador j) throws RemoteException;
@@ -39,4 +38,6 @@ public interface ModeloRemoto extends ObservableRemoto{
     public Jugador getJugador(int oid) throws RemoteException;
     public void setStatsOn(Jugador jugador, boolean habilitar) throws RemoteException;
     public void setEnJuego(Jugador jugador, boolean b) throws RemoteException;
+    public void setApuestasOn(Jugador j, boolean b) throws RemoteException;
+    public ArrayList<Apuesta> getApuestas(Jugador j) throws RemoteException;
 }

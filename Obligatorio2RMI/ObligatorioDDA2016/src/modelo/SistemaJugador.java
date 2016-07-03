@@ -19,7 +19,10 @@ public class SistemaJugador {
     private ArrayList<Jugador> jugadores = new ArrayList();
     private ArrayList<Jugador> logueados = new ArrayList();
     private boolean habilitado = true;
-    private static SistemaJugador instancia = new SistemaJugador();
+    
+    // <editor-fold defaultstate="collapsed" desc="Constructor">
+    
+    private static final SistemaJugador instancia = new SistemaJugador();
     
     private SistemaJugador() {
     }
@@ -27,6 +30,8 @@ public class SistemaJugador {
     public static SistemaJugador getInstancia() {
         return instancia;
     }
+    
+    // </editor-fold>
     
     public ArrayList<Jugador> getLogueados() {
         return logueados;
@@ -88,9 +93,38 @@ public class SistemaJugador {
         }
         return total;
     }
+
+    public Jugador getJugador(int oid) {
+        for (Jugador j : jugadores){
+            if (j.getOid() == oid) return j;
+        }
+        return null;
+    }
+
+    public void setStatsOn(boolean b, Jugador jugador) {
+        Jugador j = buscarJugador(jugador.getNombre());
+        j.setStatsOn(!b);
+    }
+
+    public void setEnJuego(Jugador jugador, boolean b) {
+        Jugador j = buscarJugador(jugador.getNombre());
+        j.setEnJuego(b);
+    }
+
+    public void setApuestasOn(Jugador j, boolean b) {
+        Jugador jugador = buscarJugador(j.getNombre());
+        jugador.setApuestasOn(false);
+    }
+
+    public ArrayList<Apuesta> getApuestas(Jugador j) {
+        return (buscarJugador(j.getNombre())).getApuestas();
+    }
+
     // </editor-fold>
 
-    public void obtenerJugadores(){
+    // <editor-fold defaultstate="collapsed" desc="Persistencia">
+    
+     public void obtenerJugadores(){
         BaseDatos bd = BaseDatos.getInstancia();
         bd.conectar();
         MapeadorJugador map = new MapeadorJugador();
@@ -133,22 +167,5 @@ public class SistemaJugador {
             }
         }
     }
-
-    Jugador getJugador(int oid) {
-        for (Jugador j : jugadores){
-            if (j.getOid() == oid) return j;
-        }
-        return null;
-    }
-
-    void setStatsOn(boolean b, Jugador jugador) {
-        Jugador j = buscarJugador(jugador.getNombre());
-        j.setStatsOn(!b);
-    }
-
-    void setEnJuego(Jugador jugador, boolean b) {
-        Jugador j = buscarJugador(jugador.getNombre());
-        j.setEnJuego(b);
-    }
-
+    // </editor-fold>
 }

@@ -37,9 +37,10 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
     public Mesa() throws RemoteException{
         
     }
- // </editor-fold>
+    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters y setters">   
+    @Override
     public ArrayList<Color> getColoresDisp() {
         if (coloresDisp == null){
             coloresDisp = new ArrayList<>();
@@ -51,22 +52,27 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         return coloresDisp;
     }
 
+    @Override
     public void setColoresDisp(ArrayList<Color> coloresDisp) {
         this.coloresDisp = coloresDisp;
     }
     
+    @Override
     public String getNombre() {
         return nombre;
     }
 
+    @Override
     public ArrayList<TipoJugador> getJugadoresEspera() {
         return jugadoresEspera;
     }
     
+    @Override
     public ArrayList<TipoJugador> getJugadoresMesa() {
         return jugadoresMesa;
     }
     
+    @Override
     public ArrayList<TipoJugador> getTodosJugadoresEnMesa(){
         ArrayList<TipoJugador> todos = new ArrayList<>();
         for (TipoJugador k : jugadoresMesa){
@@ -78,36 +84,36 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         return todos;
     }
 
+    @Override
     public ArrayList<Numero> getNumeros() {
         return numeros;
     }
 
+    @Override
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Metodos">  
-    
     @Override
     public void agregarJugador(Color c, Jugador j){
-        // aca perdi el try catch :(
-//        try {
-            // crea y agrega el jugadorRuleta en la mesa actual y lo guarda en su lista de JR
-            // devuelve boolean que indica si el jugador esta en espera o no
-            TipoJugador jr = new JugadorRuleta(c, this, j);
-            jr.setMesa(this); // mesa en jugador
-            j.setJugadorTipo(jr);
-            if(jugadoresMesa.isEmpty()){
-                jugadoresMesa.add(jr);
-            }
-            else if(jugadoresMesa.size()<4 && this.buscarRonda(this.getUltimaRonda()).getNroGanador() == null){           
-                jugadoresEspera.add(jr);
-            }
-            Modelo.getInstancia().notificar(Modelo.EVENTO_NUEVO_JUGADOR_MESA_RULETA);
-            j.setEnMesa(true);
+        // crea y agrega el jugadorRuleta en la mesa actual y lo guarda en su lista de JR
+        // devuelve boolean que indica si el jugador esta en espera o no
+        TipoJugador jr = new JugadorRuleta(c, this, j);
+        jr.setMesa(this);
+        j.setJugadorTipo(jr);
+        if(jugadoresMesa.isEmpty()){
+            jugadoresMesa.add(jr);
+        }
+        else if(jugadoresMesa.size()<4 && this.buscarRonda(this.getUltimaRonda()).getNroGanador() == null){           
+            jugadoresEspera.add(jr);
+        }
+        Modelo.getInstancia().notificar(Modelo.EVENTO_NUEVO_JUGADOR_MESA_RULETA);
+        j.setEnMesa(true);
     }
     
+    @Override
     public void quitarJugador(TipoJugador j) throws RemoteException{
         jugadoresMesa.remove(j);
         jugadoresEspera.remove(j);
@@ -125,11 +131,11 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         // no necesito quitar mesa de j, porque se va a eliminar solo con el garbage collector
     }
 
+    @Override
     public boolean validar() {
         return !nombre.isEmpty() && !nombre.contains(",");
     }
 
-    // cambie que chequee nombrecompleto por solo nombre de usuario.
     @Override
     public TipoJugador buscarJugador(Jugador j){
         for(TipoJugador jr:jugadoresMesa){
@@ -264,7 +270,6 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         
         if (v.equals("")) {
             desapostar(n, jugador);
-            if (!numero.split(" ")[0].equals("Pleno")) throw new InvalidUserActionException("");
         } 
         else {
             int montoInt = Integer.parseInt(v);
@@ -284,8 +289,10 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
     public void desapostar(Numero n, TipoJugador jugador) throws InvalidUserActionException, RemoteException {
         if(jugador.isApostado()) throw new InvalidUserActionException("Ya ha finalizado su apuesta");
         for(TipoJugador jr:jugadoresMesa){
-            if(jugador==jr)
-                if (n!=null && n.getApuesta() != null) (buscarRonda(getUltimaRonda())).desapostar(jugador, n);
+            if(jugador.getJugador().getNombre().equals(jr.getJugador().getNombre())){
+                if (n == null || n.getApuesta() == null) throw new InvalidUserActionException("Debe elegir un monto para apostar");
+                (buscarRonda(getUltimaRonda())).desapostar(jugador, n);
+            }
         }
         Modelo.getInstancia().notificar(Modelo.EVENTO_ACTUALIZA_SALDOS);
     }
@@ -341,7 +348,6 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         for (TipoJugador jr : jugadoresMesa){
             boolean haApostado = false;
             for (Apuesta a: jr.getJugador().getApuestas()){
-                //Apuesta aGot = buscarRonda()
                 if (a.getRonda().equals(ultRonda)) haApostado = true;
             }
             if (!haApostado) jr.setRondasSinApostar(jr.getRondasSinApostar() + 1);
@@ -372,7 +378,6 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         Mesa m = (Mesa)o;
         return nombre.equalsIgnoreCase(m.getNombre());
     }
-     // </editor-fold>
 
     @Override
     public int hashCode() {
@@ -380,9 +385,18 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         hash = 83 * hash + Objects.hashCode(this.nombre);
         return hash;
     }
-
-
-
+    
+    @Override
+    public Numero buscarNumeroEnTablero(int randomOut) {
+        ArrayList<Numero> nums = this.getNumeros();
+        for (Numero n: nums){
+            if (n.getValor() == randomOut) return n;
+        }
+        return null;
+    }
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Persistencia">
     private void persistencia() {
         BaseDatos bd = BaseDatos.getInstancia();
         bd.conectar();
@@ -395,7 +409,7 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
 
     private void persistoJugador(TipoJugador jr, BaseDatos bd) {
         MapeadorJugador map = new MapeadorJugador();
-        ArrayList jugadores = bd.consultar(map, " and u.oid = "+jr.getJugador().getOid());
+        ArrayList jugadores = bd.consultar(map, " and u.oid = "+jr.getJugador().getOid()); // esto podria ser diferente
         Jugador j = (Jugador) jugadores.get(0);
         map.setJ(j);
         j.setSaldo(jr.getJugador().getSaldo());
@@ -408,14 +422,7 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         bd.guardar(mapR);
     }
 
-    @Override
-    public Numero buscarNumeroEnTablero(int randomOut) {
-        ArrayList<Numero> nums = this.getNumeros();
-        for (Numero n: nums){
-            if (n.getValor() == randomOut) return n;
-        }
-        return null;
-    }
+    // </editor-fold>
 
 
 
