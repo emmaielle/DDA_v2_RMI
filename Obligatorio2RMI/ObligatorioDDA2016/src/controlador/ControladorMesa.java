@@ -142,6 +142,7 @@ public class ControladorMesa extends UnicastRemoteObject implements ObservadorRe
 
     public void salirDeMesa() {
         try {
+            //jugador = mesa.buscarJugador(jugador.getJugador());
             modelo.salirDeMesaRuleta(jugador, mesa);
             eliminarObservador();
         } catch (RemoteException ex) {

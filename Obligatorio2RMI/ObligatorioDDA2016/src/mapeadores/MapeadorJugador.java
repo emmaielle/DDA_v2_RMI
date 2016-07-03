@@ -71,7 +71,9 @@ public class MapeadorJugador implements Persistente {
     @Override
     public String getSqlSelect() {
         String sql = 
-        "SELECT * FROM usuario u LEFT JOIN apuesta a ON u.oid=a.oidJugador LEFT JOIN ronda r ON a.oidRonda=r.oid";
+        "SELECT * "
+                + "FROM usuario u LEFT JOIN apuesta a ON u.oid=a.oidJugador "
+                + "LEFT JOIN ronda r ON a.oidRonda=r.oid";
         if(j!=null) sql+= " and u.oid=" + getOid();
         sql+=" ORDER BY u.oid,r.oid";
         return sql;
@@ -86,6 +88,8 @@ public class MapeadorJugador implements Persistente {
                 j.setPassword(rs.getString("password"));
                 j.setNombreCompleto(rs.getString("nombreUsuario"));
                 j.setSaldo(rs.getInt("saldo"));
+//                j.setTotalApostado(rs.getInt("apostado"));
+//                j.setTotalCobrado(rs);
             }
             int oidRonda = rs.getInt("oidRonda");
             if (oidRonda != 0){
