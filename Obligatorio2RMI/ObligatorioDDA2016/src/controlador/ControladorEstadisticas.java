@@ -68,9 +68,13 @@ public class ControladorEstadisticas extends UnicastRemoteObject implements Obse
         modelo.setStatsOn(jugador, habilitar);
     }
 
-//    public void eliminarObservador() {
-//        modelo.deleteObserver(this);
-//    }
+    public void eliminarObservador() {
+        try {
+            modelo.quitar(this);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorEstadisticas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @Override
     public void actualizar(ObservableRemoto origen, Serializable param) throws RemoteException {

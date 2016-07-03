@@ -204,10 +204,10 @@ public class VistaListaMesasV1 extends javax.swing.JDialog implements VistaLista
         JOptionPane.showMessageDialog(this, msg);
     }
     
-//    @Override
-//    public void eliminarObservador() {
-//        controlador.eliminarObservador();
-//    }
+    @Override
+    public void eliminarObservador() {
+        controlador.eliminarObservador();
+    }
     
     @Override
     public void verApuestas(Jugador j) {
