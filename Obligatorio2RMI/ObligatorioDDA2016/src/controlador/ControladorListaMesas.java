@@ -104,5 +104,13 @@ public class ControladorListaMesas extends UnicastRemoteObject implements Observ
             else vista.habilitarApuestas(true);
         }
     }
+
+    public void eliminarObservador() {
+        try {
+            modelo.quitar(this);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorListaMesas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
    
 }

@@ -83,7 +83,7 @@ public class VistaLoginV1 extends javax.swing.JDialog implements VistaLogin{
     }//GEN-LAST:event_btnIngresarCasinoActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        //controlador.eliminarObservador();
+        controlador.eliminarObservador();
     }//GEN-LAST:event_formWindowClosing
 
 

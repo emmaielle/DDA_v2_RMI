@@ -16,5 +16,5 @@ public interface VistaEstadisticas {
     public void mostrarTodosApostado(long m);
     public void mostrarTodosCobrado(long m);
     public void habilitarBotonStats(boolean habilitar);
-    //public void eliminarObservador();
+    public void eliminarObservador();
 }
