@@ -33,6 +33,7 @@ public class ControladorJuegos extends UnicastRemoteObject implements Observador
     public ControladorJuegos(VistaJuegos v ,Jugador j)throws RemoteException{
         try {
             this.vista = v;
+            System.setProperty("java.rmi.server.hostname","localhost");
             this.modelo=(ModeloRemoto)Naming.lookup("rmi://localhost/modelo");
             jugador = j;
             modelo.agregar(this);

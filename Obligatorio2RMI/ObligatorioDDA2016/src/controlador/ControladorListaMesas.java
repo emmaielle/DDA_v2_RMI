@@ -34,6 +34,7 @@ public class ControladorListaMesas extends UnicastRemoteObject implements Observ
 
     public ControladorListaMesas(Jugador j, VistaListaMesas vista) throws RemoteException {
         try {
+            //System.setProperty("java.rmi.server.hostname","179.25.157.190");
             this.modelo=(ModeloRemoto)Naming.lookup("rmi://localhost/modelo");
             this.jugador= j;
             this.vista = vista;
