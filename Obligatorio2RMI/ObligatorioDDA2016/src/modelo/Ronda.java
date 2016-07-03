@@ -238,7 +238,7 @@ public class Ronda implements Serializable, Observer{
     
     public void eliminarApuestas(Jugador j) throws RemoteException{
         for (int i = 0; i < apuestas.size(); i++){
-            if(apuestas.get(i).getJugador() == j){
+            if(apuestas.get(i).getJugador().getNombre().equals(j.getNombre())){
                 quitarApuesta(apuestas.get(i));
                 i--;
             }
