@@ -16,7 +16,6 @@ import java.util.ArrayList;
  * @author Moi
  */
 public interface MesaRemoto extends Remote {
-    
     public ArrayList<Color> getColoresDisp() throws RemoteException;
     public void setColoresDisp(ArrayList<Color> coloresDisp) throws RemoteException;
     public String getNombre() throws RemoteException;

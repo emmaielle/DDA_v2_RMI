@@ -24,7 +24,6 @@ public interface ModeloRemoto extends ObservableRemoto{
     public ArrayList<String> getJuegos() throws RemoteException;
     public Object getJuego(String j) throws RemoteException;
     public ArrayList<MesaRemoto> listarMesasRuleta() throws RemoteException;
-    public void agregarMesaRuleta(MesaRemoto m, Jugador j, Color c) throws InvalidUserActionException, RemoteException;
     public MesaRemoto buscarMesaRuleta(String nom) throws RemoteException;
     public void unirJugadorAMesaRuleta(Jugador j, MesaRemoto m, Color c) throws InvalidUserActionException, RemoteException;
     public ArrayList<TipoJugador> getJugadoresPorMesa(MesaRemoto m) throws RemoteException;

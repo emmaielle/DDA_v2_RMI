@@ -97,11 +97,9 @@ public class MapeadorJugador implements Persistente {
                 Date fecha = new Timestamp(rs.getTimestamp("fechaHoraCreacion").getTime());
                 Ronda r;
                     r = new Ronda();
-                
                 r.setOid(oidRonda);
                 j.agregarApuesta(num,monto,r,ganado, fecha);
-            }
-            
+            } 
         } catch (SQLException ex) {
             System.out.println("Error al leer usuario:" + ex.getMessage());
         }

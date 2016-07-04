@@ -93,7 +93,7 @@ public class JuegoRuleta implements Serializable {
     }
     
     public MesaRemoto crearYAgregarAMesa(Jugador j, String n) {
-        Mesa m = null;
+        MesaRemoto m = null;
         try {
             m = new Mesa(n);
             //m.agregarJugador(m.getUnusedColour(), j);

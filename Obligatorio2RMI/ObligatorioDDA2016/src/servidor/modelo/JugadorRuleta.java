@@ -16,14 +16,14 @@ import java.util.Objects;
  */
 public class JugadorRuleta implements Serializable, TipoJugador{
     private Color color;
-    private transient Mesa mesa;
+    private MesaRemoto mesa;
     private Jugador jugador;
     private boolean apostado;
     private int rondasSinApostar;
     private int rondasSinApostarAnterior;
     
     // <editor-fold defaultstate="collapsed" desc="Constructor">       
-    public JugadorRuleta(Color color, Mesa mesa, Jugador jugador) {
+    public JugadorRuleta(Color color, MesaRemoto mesa, Jugador jugador) {
         this.color = color;
         this.mesa = mesa;
         this.jugador = jugador;
@@ -53,7 +53,7 @@ public class JugadorRuleta implements Serializable, TipoJugador{
     }
     
     @Override
-    public Mesa getMesa() {
+    public MesaRemoto getMesa() {
         return mesa;
     }
 
@@ -119,8 +119,5 @@ public class JugadorRuleta implements Serializable, TipoJugador{
     }
     
     // </editor-fold>
-
-
-
 
 }

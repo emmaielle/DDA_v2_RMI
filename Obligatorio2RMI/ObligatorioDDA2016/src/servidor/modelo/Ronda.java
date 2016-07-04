@@ -304,23 +304,5 @@ public class Ronda implements Serializable, Observer{
         apuestas.add(a);
     }
     
-    public void agregar(int monto, String sNumero, Date fechayhora){
-        Apuesta a;
-        if(sNumero.contains("Pleno")){
-            a = new ApuestaPleno(monto, 
-                    sNumero, null, this, fechayhora);
-            a.setMontoGanado(monto);            
-        }
-        else if(sNumero.contains("Docena")){
-            a=new ApuestaDocena(monto, sNumero, this, fechayhora);
-            a.setMontoGanado(monto);
-        }
-        else {
-            a=new ApuestaColor(monto, sNumero, this, fechayhora);
-            a.setMontoGanado(monto);
-        }
-        apuestas.add(a);
-    }
-    
     // </editor-fold>
 }

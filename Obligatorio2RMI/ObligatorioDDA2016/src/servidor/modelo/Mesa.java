@@ -403,7 +403,7 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         bd.conectar();
         for(TipoJugador jr:jugadoresMesa){
             persistoJugador(jr, bd);
-            persistoRonda(jr,bd);   
+            persistoRonda(bd);   
         }     
         bd.desconectar();
     }
@@ -417,7 +417,7 @@ public class Mesa extends UnicastRemoteObject implements MesaRemoto {
         bd.guardar(map);
     }
 
-    private void persistoRonda(TipoJugador jr, BaseDatos bd) {
+    private void persistoRonda(BaseDatos bd) {
         MapeadorRonda mapR = new MapeadorRonda();
         mapR.setR(this.buscarRonda(this.getUltimaRonda()));
         bd.guardar(mapR);

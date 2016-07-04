@@ -17,7 +17,6 @@ public interface VistaListaMesas {
     public void mostrar(ArrayList<MesaRemoto> lista);
     public void abrirMesa(MesaRemoto m,Jugador jr, boolean enEspera);
     public void salirDeJuego();
-    public void errorCrearMesa(String msg);
     public void ingresarMesa();
     public void crearMesa();
     public void eliminarObservador();

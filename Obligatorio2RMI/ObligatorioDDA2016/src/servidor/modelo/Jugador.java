@@ -165,10 +165,10 @@ public class Jugador implements Serializable{
         }
     }
     
-    public void agregarApuesta(String tipoApuesta, int montoApostado, Ronda r, int montGan, Date fecha) {
+    public void agregarApuesta(String tipo, int monto, Ronda r, int montGan, Date fecha) {
         Numero num = null;
-        if (tipoApuesta.contains("Pleno")) num = new Numero(Integer.parseInt(tipoApuesta.split(" ")[1]));;
-        Apuesta a = r.setApuestaByType(tipoApuesta, montoApostado, this, num, fecha);
+        if (tipo.contains("Pleno")) num = new Numero(Integer.parseInt(tipo.split(" ")[1]));;
+        Apuesta a = r.setApuestaByType(tipo, monto, this, num, fecha);
         r.agregar(a);
         a.setJugador(this);
         a.setMontoGanado(montGan);
