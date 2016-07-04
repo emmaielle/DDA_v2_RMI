@@ -88,8 +88,6 @@ public class MapeadorJugador implements Persistente {
                 j.setPassword(rs.getString("password"));
                 j.setNombreCompleto(rs.getString("nombreUsuario"));
                 j.setSaldo(rs.getInt("saldo"));
-//                j.setTotalApostado(rs.getInt("apostado"));
-//                j.setTotalCobrado(rs);
             }
             int oidRonda = rs.getInt("oidRonda");
             if (oidRonda != 0){
@@ -99,11 +97,9 @@ public class MapeadorJugador implements Persistente {
                 Date fecha = new Timestamp(rs.getTimestamp("fechaHoraCreacion").getTime());
                 Ronda r;
                     r = new Ronda();
-                
                 r.setOid(oidRonda);
                 j.agregarApuesta(num,monto,r,ganado, fecha);
-            }
-            
+            } 
         } catch (SQLException ex) {
             System.out.println("Error al leer usuario:" + ex.getMessage());
         }

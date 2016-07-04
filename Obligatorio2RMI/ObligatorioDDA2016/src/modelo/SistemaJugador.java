@@ -42,9 +42,6 @@ public class SistemaJugador {
     }
     
     // <editor-fold defaultstate="collapsed" desc="Metodos">
-    public void agregar(Jugador j){
-        jugadores.add(j);
-    }
     
     public Jugador login(String nom, String psw) throws InvalidUserActionException{
         if(!habilitado) return null;
@@ -141,9 +138,9 @@ public class SistemaJugador {
         bd.desconectar();
     }
     
-     public void retrieveApuestasFromDB(BaseDatos bd, ArrayList<Jugador> jugadoresArray){
+     public void retrieveApuestasFromDB(BaseDatos bd, ArrayList<Jugador> jugArray){
         ArrayList<Ronda> rondas = new ArrayList<>();
-        for (Jugador j : jugadoresArray){
+        for (Jugador j : jugArray){
             ArrayList<Apuesta> apuestas = j.getApuestas();
             for (Apuesta a : apuestas){ //para cada una de esas apuestas, le termino de agregar la info de la ronda
                 boolean bYaEstaba = false; 

@@ -198,11 +198,6 @@ public class VistaListaMesasV1 extends javax.swing.JDialog implements VistaLista
         }
         
     }
-
-    @Override
-    public void errorCrearMesa(String msg) {
-        JOptionPane.showMessageDialog(this, msg);
-    }
     
     @Override
     public void eliminarObservador() {

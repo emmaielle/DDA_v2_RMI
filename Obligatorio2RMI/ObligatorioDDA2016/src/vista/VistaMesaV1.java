@@ -157,11 +157,6 @@ public class VistaMesaV1 extends javax.swing.JDialog implements VistaMesa, Actio
     }
 
     @Override
-    public void colorSaldo(Color color){
-        top.colorSaldo(color);
-    }
-
-    @Override
     public void colorJugador(Color color) {
         top.colorJugador(color);
     }

@@ -18,7 +18,7 @@ public interface TipoJugador {
     public void setJugador(Jugador jugador);
     public int getRondasSinApostarAnterior();
     public void setRondasSinApostarAnterior(int rondasSinApostarAnterior);
-    public Mesa getMesa();
+    public MesaRemoto getMesa();
     public Color getColor();
     public void setColor(Color color);
     public void setApostado(boolean apostado);

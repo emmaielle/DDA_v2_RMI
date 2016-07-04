@@ -103,11 +103,6 @@ public class Modelo extends ObservableRemotoV1 implements ModeloRemoto {
     }
 
     @Override
-    public void agregarMesaRuleta(MesaRemoto m, Jugador j, Color c) throws InvalidUserActionException, RemoteException {
-        casino.getRuleta().agregarMesaRuleta(m, j, c);
-    }
-
-    @Override
     public MesaRemoto buscarMesaRuleta(String nom) throws RemoteException{
         return casino.getRuleta().buscarMesa(nom);
     }

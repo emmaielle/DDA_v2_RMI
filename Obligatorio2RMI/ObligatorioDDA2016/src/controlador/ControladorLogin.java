@@ -32,8 +32,8 @@ public class ControladorLogin extends UnicastRemoteObject implements ObservadorR
     public ControladorLogin(VistaLogin vista) throws RemoteException{
         try {
             this.vista = vista;
-            System.setProperty("java.rmi.server.hostname","186.54.152.199");
-            this.modelo=(ModeloRemoto)Naming.lookup("rmi://186.54.152.199/modelo");
+            //System.setProperty("java.rmi.server.hostname","186.54.152.199");
+            this.modelo=(ModeloRemoto)Naming.lookup("rmi://localhost/modelo");
             modelo.agregar(this);
             vista.habilitar(modelo.isHabilitado());
         } catch (NotBoundException | MalformedURLException ex) {
