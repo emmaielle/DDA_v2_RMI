@@ -140,12 +140,15 @@ public class SistemaJugador {
         retrieveApuestasFromDB(bd, jugadores);
         bd.desconectar();
     }
+
     
      public void retrieveApuestasFromDB(BaseDatos bd, ArrayList<Jugador> jugadoresArray){
         ArrayList<Ronda> rondas = new ArrayList<>();
         for (Jugador j : jugadoresArray){
             ArrayList<Apuesta> apuestas = j.getApuestas();
             for (Apuesta a : apuestas){ //para cada una de esas apuestas, le termino de agregar la info de la ronda
+                j.setTotalApostado(j.getTotalCobrado()+a.getMonto());
+                j.setTotalCobrado(j.getTotalApostado()+a.getMontoGanado());
                 boolean bYaEstaba = false; 
                 Ronda r;    
                 for (int i = 0; i < rondas.size(); i++){ // al primero no entra porque la lista de rondas esta vacia
